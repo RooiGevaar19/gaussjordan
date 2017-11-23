@@ -9,9 +9,9 @@ exec="run";
 i=1;
 for ifile in `ls 04-*.sub.cpp` ; do
 echo "//------------------------------------------------------------------------------" > foutput-$i-.cpp
-echo "// Projekt:   MyMatrix vs. Eigen - test operacji na macierzach" >> foutput-$i-.cpp
+echo "// Projekt:   MyMatrix vs. Eigen" >> foutput-$i-.cpp
 echo "// Autorzy:   Paweł Lipkowski" >> foutput-$i-.cpp
-echo "// Data:      11/20/2017" >> foutput-$i-.cpp
+echo "// Data:      11/23/2017" >> foutput-$i-.cpp
 #=======================================================================================================
 # silnik kompilujący moduły
 if ls 00-*.sub.cpp 1> /dev/null 2>&1; then

@@ -232,8 +232,35 @@ private:
             }
         }
 
-        // metoda eliminacji Gaussa
+        // metoda eliminacji Gaussa bez wyboru elementu podstawowego
         vector<T> solveGauss() {
+            int n = getRowCount();
+            for (int i = 0; i < n; i++) {
+                // wyprowadź zera przed obecnym wierszem
+                for (int k = i+1; k < n; k++) {
+                    T c = -matrix[k][i] / matrix[i][i];
+                    for (int j = i; j < n+1; j++) {
+                        if (i == j) {
+                            matrix[k][j] = 0;
+                        } else {
+                            matrix[k][j] += c * matrix[i][j];
+                        }
+                    }
+                }
+            }
+            // rozwiąż Ax = B za pomocą powstałej macierzy trójkątnej
+            vector<T> x(n);
+            for (int i=n-1; i>=0; i--) {
+                x[i] = matrix[i][n] / matrix[i][i];
+                for (int k=i-1;k>=0; k--) {
+                    matrix[k][n] -= matrix[k][i] * x[i];
+                }
+            }
+            return x;
+        }
+
+        // metoda eliminacji Gaussa z częściowym wyborem
+        vector<T> solveGaussPartial() {
             int n = getRowCount();
             for (int i = 0; i < n; i++) {
                 // znajdź wiersz z maksymalnym elementem
@@ -250,6 +277,56 @@ private:
                     T pom = matrix[maxRow][k];
                     matrix[maxRow][k] = matrix[i][k];
                     matrix[i][k] = pom;
+                }
+                // wyprowadź zera przed obecnym wierszem
+                for (int k = i+1; k < n; k++) {
+                    T c = -matrix[k][i] / matrix[i][i];
+                    for (int j = i; j < n+1; j++) {
+                        if (i == j) {
+                            matrix[k][j] = 0;
+                        } else {
+                            matrix[k][j] += c * matrix[i][j];
+                        }
+                    }
+                }
+            }
+            // rozwiąż Ax = B za pomocą powstałej macierzy trójkątnej
+            vector<T> x(n);
+            for (int i=n-1; i>=0; i--) {
+                x[i] = matrix[i][n] / matrix[i][i];
+                for (int k=i-1;k>=0; k--) {
+                    matrix[k][n] -= matrix[k][i] * x[i];
+                }
+            }
+            return x;
+        }
+
+        // metoda eliminacji Gaussa z pełnym wyborem elementu
+        vector<T> solveGaussFull() {
+            int n = getRowCount();
+            for (int i = 0; i < n; i++) {
+                // znajdź wiersz z maksymalnym elementem
+                T maxEl = abs(matrix[i][i]);
+                int maxRow = i;
+                int maxCol = i;
+                for (int k = i+1; k < n; k++) {
+                    if (abs(matrix[k][i]) > maxEl) {
+                        maxEl = abs(matrix[k][i]);
+                        maxRow = k;
+                        maxCol = i;
+                    }
+                }
+                // zamień maksymalny wiersz z obecnym
+                for (int k = i; k < n+1; k++) {
+                    T pom = matrix[maxRow][k];
+                    matrix[maxRow][k] = matrix[i][k];
+                    matrix[i][k] = pom;
+                }
+                // zamień maksymalną kolumnę z obecną
+                for (int k = i; k < n+1; k++) {
+                  T pom = matrix[k][maxCol];
+                  matrix[k][maxCol] = matrix[k][i];
+                  matrix[k][i] = pom;
                 }
                 // wyprowadź zera przed obecnym wierszem
                 for (int k = i+1; k < n; k++) {
