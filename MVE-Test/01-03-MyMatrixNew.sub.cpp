@@ -179,11 +179,11 @@ private:
         }
 
         // mnożenie macierzy przez wektor
-        vector<T> operator*(const vector<T>& pom) {
+        vector<T> operator*(const vector<T> pom) {
             vector<T> result(pom.size(), 0.0);
             for (unsigned i=0; i<rows; i++) {
                 for (unsigned j=0; j<cols; j++) {
-                    result[i] = this->matrix[i][j] * pom[j];
+                    result[i] += this->matrix[i][j] * pom[j];
                 }
             }
             return result;
@@ -226,7 +226,7 @@ private:
             for (int i = 0; i < getRowCount(); i++) {
                 cout << "[ ";
                 for (int j=0; j < getColCount(); j++) {
-                    cout << setw(8) << getAt(i,j);
+                    cout << setw(12) << getAt(i,j);
                 }
                 cout << " ]" << endl;
             }

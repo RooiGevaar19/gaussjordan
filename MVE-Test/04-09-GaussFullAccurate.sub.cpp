@@ -11,7 +11,7 @@ double testMyMatrixFloat(MyMatrix<float> A, vector<float> B, int grade, int trie
         M.setAt(i, grade, B[i]);
     }
     vector<float> res;
-    res = M.solveGauss();
+    res = M.solveGaussFull();
     vector<float> acc;
     acc = A*res;
     for (int i = 0; i < grade; i++) acc[i] -= B[i];
@@ -30,7 +30,7 @@ double testMyMatrixDouble(MyMatrix<double> A, vector<double> B, int grade, int t
         M.setAt(i, grade, B[i]);
     }
     vector<double> res;
-    res = M.solveGauss();
+    res = M.solveGaussFull();
     vector<double> acc;
     acc = A*res;
     for (int i = 0; i < grade; i++) acc[i] -= B[i];
@@ -39,7 +39,7 @@ double testMyMatrixDouble(MyMatrix<double> A, vector<double> B, int grade, int t
 }
 
 double testEigenFloat(MatrixXf A, VectorXf B, int grade, int tries) {
-    HouseholderQR<MatrixXf> dec(A);
+    FullPivLU<MatrixXf> dec(A);
     VectorXf x = dec.solve(B);
     VectorXf acc;
     acc = A*x;
@@ -49,7 +49,7 @@ double testEigenFloat(MatrixXf A, VectorXf B, int grade, int tries) {
 }
 
 double testEigenDouble(MatrixXd A, VectorXd B, int grade, int tries) {
-    HouseholderQR<MatrixXd> dec(A);
+    FullPivLU<MatrixXd> dec(A);
     VectorXd x = dec.solve(B);
     VectorXd acc;
     acc = A*x;

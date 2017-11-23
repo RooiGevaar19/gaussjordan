@@ -42,6 +42,18 @@ double avg(vector<double> t) {
     return sum(t)/t.size();
 }
 
+float avg(VectorXf t) {
+    float s = 0.0;
+	for (int i = 0; i < t.size(); i++) s += t(i);
+    return s/t.size();
+}
+
+double avg(VectorXd t) {
+    double s = 0.0;
+	for (int i = 0; i < t.size(); i++) s += t(i);
+    return s/t.size();
+}
+
 // odchylenie standardowe
 
 float stddev(float t[], int n) {
@@ -114,4 +126,24 @@ void fill_random(vector<double>& A, int n) {
         //A[i] = ((double)rand()/RAND_MAX*200.0)-100.0;
         A[i] = (double)(rand()%(200))-100;
     }
+}
+
+MatrixXf MyMatrixToEigen(MyMatrix<float> input) {
+    MatrixXf a(input.getRowCount(), input.getColCount());
+    for (int i = 0; i < input.getRowCount(); i++) {
+        for (int j = 0; j < input.getColCount(); j++) {
+            a(i, j) = input.getAt(i,j);
+        }
+    }
+    return a;
+}
+
+MatrixXd MyMatrixToEigen(MyMatrix<double> input) {
+    MatrixXd a(input.getRowCount(), input.getColCount());
+    for (int i = 0; i < input.getRowCount(); i++) {
+        for (int j = 0; j < input.getColCount(); j++) {
+            a(i, j) = input.getAt(i,j);
+        }
+    }
+    return a;
 }
