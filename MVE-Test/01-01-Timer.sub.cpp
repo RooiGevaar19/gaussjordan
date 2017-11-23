@@ -16,11 +16,3 @@ public:
 private:
     timespec beg_, end_;
 };
-
-double avg(double t[], int n)			// pomocniczo do uśredniania wyników
-{
-	double sum = 0.0;
-	int i;
-	for (i = 0; i < n; i++) sum += t[i];
-	return sum/n;
-}

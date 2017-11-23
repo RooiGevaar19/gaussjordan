@@ -70,6 +70,7 @@ void test3(int grade, int tries) {
 
 
 int main() {
+    srand(time(NULL));
     int tries = 10;
     int max_grade = 1000;
     int k = 1;

@@ -68,7 +68,7 @@ double testEigenDouble(int grade, int tries) {
 }
 
 int main() {
-    //printf("Rozmiar\tMyMatrix-Float\tMyMatrix-Double\tMyMatrix-Frac\tEigen-Float\tEigen-Double\n");
+    srand(time(NULL));
     printf("Rozmiar\tMyMatrix-Float\tMyMatrix-Double\tEigen-Float\tEigen-Double\n");
     int tries = 10;
     int max_grade = 1000;
