@@ -3,7 +3,7 @@
 
 class Params {
     private:
-        int fieldsN;
+        int fieldsCount;
         int mushCount;
         int* mush;
         int p1start;
@@ -14,7 +14,7 @@ class Params {
     public:
         Params (string input) {
             fp = fopen(input.c_str(), "r");
-            fscanf(fp, "%i\n", fieldsN);
+            fscanf(fp, "%i\n", fieldsCount);
             fscanf(fp, "%i", mushCount);
             *mush = new int [mushCount];
             for (int i = 0; i < mushcount; i++) {
@@ -42,11 +42,47 @@ class Params {
             delete wall;
             delete prop;
         }
+
+        int getFieldsCount() {
+            return fieldsCount;
+        }
+
+        int getMushCount() {
+            return mushCount;
+        }
+
+        int getMushPosition(int index) {
+            return mush[index];
+        }
+
+        int getP1StartPos() {
+            return p1start;
+        }
+
+        int getP2StartPos() {
+            return p2start;
+        }
+
+        int getFieldsCount() {
+            return fieldsCount;
+        }
+
+        int getWallCount() {
+            return wallCount;
+        }
+
+        int getWallValue(int index) {
+            return wall[index];
+        }
+
+        int getWallStrength(int index) {
+            return prop[index];
+        }
 }
 
 double doSimulation(int tries) {
     Params params = new Params("input");
-
+    startGame(params);
 }
 
 int main() {

@@ -147,3 +147,8 @@ MatrixXd MyMatrixToEigen(MyMatrix<double> input) {
     }
     return a;
 }
+
+Fraction abs(Fraction x) {
+    Fraction jp2gmd(abs(x.getNumerator())/abs(x.getDenominator()));
+    return jp2gmd;
+}
