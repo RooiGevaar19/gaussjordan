@@ -14,7 +14,10 @@ double testMyMatrixFloat(MyMatrix<float> A, vector<float> B, int grade, int trie
     res = M.solveGauss();
     vector<float> acc;
     acc = A*res;
-    for (int i = 0; i < grade; i++) acc[i] -= B[i];
+    for (int i = 0; i < grade; i++){
+         acc[i] -= B[i];
+         acc[i] = abs(acc[i]);
+    }
     double errors = avg(acc);
     return errors;
 }
@@ -33,7 +36,10 @@ double testMyMatrixDouble(MyMatrix<double> A, vector<double> B, int grade, int t
     res = M.solveGauss();
     vector<double> acc;
     acc = A*res;
-    for (int i = 0; i < grade; i++) acc[i] -= B[i];
+    for (int i = 0; i < grade; i++){
+         acc[i] -= B[i];
+         acc[i] = abs(acc[i]);
+    }
     double errors = avg(acc);
     return errors;
 }
