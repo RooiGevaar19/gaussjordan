@@ -66,7 +66,7 @@ double testEigenDouble(MatrixXd A, VectorXd B, int grade, int tries) {
 
 int main() {
     srand(time(NULL));
-    printf("Rozmiar\tMyMatrix-Float\tMyMatrix-Double\tMyMatrix-Fraction\tEigen-Float\tEigen-Double\n");
+    printf("Rozmiar\tMyMatrix-Float\tMyMatrix-Double\tEigen-Float\tEigen-Double\n");
     int k = 1;
     int grade = 8;
     for (int grade = 2; grade <= max_grade; grade+=k) {
