@@ -18,7 +18,7 @@ double testMyMatrixFloat(MyMatrix<float> A, vector<float> B, int grade, int trie
          acc[i] -= B[i];
          acc[i] = abs(acc[i]);
     }
-    double errors = avg(acc);
+    double errors = max(acc);
     return errors;
 }
 
@@ -40,7 +40,7 @@ double testMyMatrixDouble(MyMatrix<double> A, vector<double> B, int grade, int t
          acc[i] -= B[i];
          acc[i] = abs(acc[i]);
     }
-    double errors = avg(acc);
+    double errors = max(acc);
     return errors;
 }
 
@@ -50,7 +50,7 @@ double testEigenFloat(MatrixXf A, VectorXf B, int grade, int tries) {
     VectorXf acc;
     acc = A*x;
     acc -= B;
-    double errors = avg(acc);
+    double errors = max(acc);
     return errors;
 }
 
@@ -60,7 +60,7 @@ double testEigenDouble(MatrixXd A, VectorXd B, int grade, int tries) {
     VectorXd acc;
     acc = A*x;
     acc -= B;
-    double errors = avg(acc);
+    double errors = max(acc);
     return errors;
 }
 
