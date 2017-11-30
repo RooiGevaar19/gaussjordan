@@ -18,6 +18,10 @@ class Fraction {
 		Fraction(double Number) {
 			this->convertDoubleToFraction(Number);
 		}
+		Fraction(int a) {
+			this->numerator = a;
+			this->denominator = 1;
+		}
 		// destruktor
 		~Fraction(void) {
 
@@ -172,6 +176,12 @@ class Fraction {
 			resultFraction.setNumerator(this->numerator * fraction.getDenominator());
 			return resultFraction;
 		}
+		Fraction operator/(int fraction) {
+			Fraction resultFraction;
+			resultFraction.setDenominator(this->denominator);
+			resultFraction.setNumerator(this->numerator * fraction);
+			return resultFraction;
+		}
 		Fraction operator/=(Fraction fraction) {
 			this->denominator *= fraction.getNumerator();
 			this->numerator *= fraction.getDenominator();
@@ -193,6 +203,10 @@ class Fraction {
 		}
 		Fraction operator--(void) {
 			this->numerator -= 1*(this->denominator);
+			return *this;
+		}
+		Fraction operator-() {
+			this->numerator *= -1;
 			return *this;
 		}
 };

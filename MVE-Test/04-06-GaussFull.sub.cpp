@@ -79,8 +79,6 @@ int main() {
         printf("%.10lf\t", ta);
         double tb = testMyMatrixDouble(grade, tries);
         printf("%.10lf\t", tb);
-        //double te = testMyMatrixFraction(grade, tries);
-        //printf("%.10lf\t", te);
         double tc = testEigenFloat(grade, tries);
         printf("%.10lf\t", tc);
         double td = testEigenDouble(grade, tries);

@@ -12,6 +12,12 @@ double sum(double t[], int n) {
     return s;
 }
 
+Fraction sum(Fraction t[], int n) {
+    Fraction s (0.0);
+	for (int i = 0; i < n; i++) s += t[i];
+    return s;
+}
+
 float sum(vector<float>& t) {
     float s = 0.0;
 	for (int i = 0; i < t.size(); i++) s += t[i];
@@ -21,6 +27,31 @@ float sum(vector<float>& t) {
 double sum(vector<double>& t) {
     double s = 0.0;
 	for (int i = 0; i < t.size(); i++) s += t[i];
+    return s;
+}
+
+Fraction sum(vector<Fraction>& t) {
+    Fraction s (0.0);
+	for (int i = 0; i < t.size(); i++) s += t[i];
+    return s;
+}
+
+// max
+float max(vector<float>& t) {
+    float s = t[0];
+	for (int i = 1; i < t.size(); i++) if (t[i] > t[i-1]) s = t[i];
+    return s;
+}
+
+double max(vector<double>& t) {
+    double s = t[0];
+	for (int i = 1; i < t.size(); i++) if (t[i] > t[i-1]) s = t[i];
+    return s;
+}
+
+Fraction max(vector<Fraction>& t) {
+    Fraction s (t[0]);
+	for (int i = 1; i < t.size(); i++) if (t[i] > t[i-1]) s = t[i];
     return s;
 }
 
@@ -34,12 +65,21 @@ double avg(double t[], int n) {
 	return sum(t,n)/n;
 }
 
+double avg(Fraction t[], int n) {
+	return sum(t,n)/n;
+}
+
 float avg(vector<float> t) {
     return sum(t)/t.size();
 }
 
 double avg(vector<double> t) {
     return sum(t)/t.size();
+}
+
+Fraction avg(vector<Fraction> t) {
+    Fraction u ((int)t.size());
+    return sum(t)/u;
 }
 
 float avg(VectorXf t) {
@@ -54,38 +94,16 @@ double avg(VectorXd t) {
     return s/t.size();
 }
 
-// odchylenie standardowe
-
-float stddev(float t[], int n) {
-    float av = sum(t,n)/n;
-    float s = 0;
-    for (int i = 0; i < n; i++) s += ((t[i] - av) * (t[i] - av));
-    float dev = sqrt(s/n);
-    return dev;
+float max(VectorXf t) {
+    float s = t(0);
+	for (int i = 1; i < t.size(); i++) if (t(i) > t(i-1)) s = t(i);
+    return s;
 }
 
-double stddev(double t[], int n) {
-    double av = sum(t,n)/n;
-    double s = 0;
-    for (int i = 0; i < n; i++) s += ((t[i] - av) * (t[i] - av));
-    double dev = sqrt(s/n);
-    return dev;
-}
-
-float stddev(vector<float> t) {
-    float av = sum(t)/t.size();
-    float s = 0;
-    for (int i = 0; i < t.size(); i++) s += ((t[i] - av) * (t[i] - av));
-    float dev = sqrt(s/t.size());
-    return dev;
-}
-
-double stddev(vector<double> t) {
-    double av = sum(t)/t.size();
-    double s = 0;
-    for (int i = 0; i < t.size(); i++) s += ((t[i] - av) * (t[i] - av));
-    double dev = sqrt(s/t.size());
-    return dev;
+double max(VectorXd t) {
+    double s = t(0);
+	for (int i = 1; i < t.size(); i++) if (t(i) > t(i-1)) s = t(i);
+    return s;
 }
 
 // wypełnianie tabel
@@ -112,6 +130,18 @@ void fill_random(MyMatrix<double>& A, int wie, int kol) {
     }
 }
 
+void fill_random(MyMatrix<Fraction>& A, int wie, int kol) {
+    for (unsigned i=0; i<wie; i++) {
+        for (unsigned j=0; j<kol; j++) {
+            //srand(time(NULL));
+            //double x = ((double)rand()/RAND_MAX*200.0)-100.0;
+            double x = (double)(rand()%(200))-100;
+            Fraction y(x);
+            A.setAt(i, j, y);
+        }
+    }
+}
+
 void fill_random(vector<float>& A, int n) {
     for (unsigned i=0; i<n; i++) {
         //srand(time(NULL));
@@ -125,6 +155,14 @@ void fill_random(vector<double>& A, int n) {
         //srand(time(NULL));
         //A[i] = ((double)rand()/RAND_MAX*200.0)-100.0;
         A[i] = (double)(rand()%(200))-100;
+    }
+}
+
+void fill_random(vector<Fraction>& A, int n) {
+    for (unsigned i=0; i<n; i++) {
+        double x = (double)(rand()%(200))-100;
+        Fraction y(x);
+        A[i] = y;
     }
 }
 
@@ -146,9 +184,4 @@ MatrixXd MyMatrixToEigen(MyMatrix<double> input) {
         }
     }
     return a;
-}
-
-Fraction abs(Fraction x) {
-    Fraction jp2gmd(abs(x.getNumerator())/abs(x.getDenominator()));
-    return jp2gmd;
 }

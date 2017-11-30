@@ -1,5 +1,10 @@
 // klasa MyMatrix
 
+Fraction abs(Fraction x) {
+    Fraction jp2gmd((double)(abs(x.getNumerator())/abs(x.getDenominator())));
+    return jp2gmd;
+}
+
 template <typename T> class MyMatrix {
 private:
     vector<vector<T> > matrix;
@@ -24,6 +29,11 @@ private:
 
     double abs(double x) {
         return (x >= 0) ? x : -x;
+    }
+
+    Fraction abs(Fraction x) {
+        Fraction jp2gmd((double)(abs(x.getNumerator())/abs(x.getDenominator())));
+        return jp2gmd;
     }
 
     //Fraction abs(Fraction x) {

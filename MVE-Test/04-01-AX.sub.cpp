@@ -30,6 +30,20 @@ void test1(int grade, int tries) {
         times[attempt] = t.elapsed();
     }
     printf("%.10lf\t", avg(times, tries));
+    // MyMatrix-Fraction
+    for (int attempt = 0; attempt < tries; attempt++) {
+        Fraction zero (21.37);
+        MyMatrix<Fraction> A(grade, grade, zero);
+        vector<Fraction> B(grade);
+        fill_random(A, grade, grade);
+        fill_random(B, grade);
+        Timer t;
+        vector<Fraction> x (grade);
+        t.reset();
+        x = A * B;
+        times[attempt] = t.elapsed();
+    }
+    printf("%.10lf\t", avg(times, tries));
     // Eigen-Float
     for (int attempt = 0; attempt < tries; attempt++) {
         MatrixXf A(grade, grade);
@@ -64,7 +78,7 @@ int main() {
     int tries = 10;
     int max_grade = 1000;
     int k = 1;
-    printf("Rozmiar\tMyMatrix-Float\tMyMatrix-Double\tEigen-Float\tEigen-Double\n");
+    printf("Rozmiar\tMyMatrix-Float\tMyMatrix-Double\tMyMatrix-Fraction\tEigen-Float\tEigen-Double\n");
     for (int grade = 2; grade <= max_grade; grade+=k) {
         test1(grade, tries);
         if (grade % (10*k) == 0) k = 10*k;

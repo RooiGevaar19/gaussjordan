@@ -30,6 +30,22 @@ double testMyMatrixDouble(int grade, int tries) {
     return avg(times, tries);
 }
 
+// MyMatrix z fraction
+
+double testMyMatrixFraction(int grade, int tries) {
+    double times[tries];
+    for (int attempt = 0; attempt < tries; attempt++) {
+        MyMatrix<Fraction> A(grade, grade+1, 0.0);
+        fill_random(A, grade, grade+1);
+        vector<Fraction> res(grade, 0.0);
+        Timer t;
+        t.reset();
+        res = A.solveGauss();
+        times[attempt] = t.elapsed();
+    }
+    return avg(times, tries);
+}
+
 // Eigen + Float
 
 double testEigenFloat(int grade, int tries) {
@@ -68,7 +84,7 @@ double testEigenDouble(int grade, int tries) {
 
 int main() {
     srand(time(NULL));
-    printf("Rozmiar\tMyMatrix-Float\tMyMatrix-Double\tEigen-Float\tEigen-Double\n");
+    printf("Rozmiar\tMyMatrix-Float\tMyMatrix-Double\tMyMatrix-Fraction\tEigen-Float\tEigen-Double\n");
     int tries = 10;
     int max_grade = 1000;
     int k = 1;
@@ -78,6 +94,8 @@ int main() {
         printf("%.10lf\t", ta);
         double tb = testMyMatrixDouble(grade, tries);
         printf("%.10lf\t", tb);
+        double te = testMyMatrixFraction(grade, tries);
+        printf("%.10lf\t", te);
         double tc = testEigenFloat(grade, tries);
         printf("%.10lf\t", tc);
         double td = testEigenDouble(grade, tries);
