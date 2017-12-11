@@ -102,9 +102,9 @@ int startGame(Params params) {
     int posP2 = params.getP2StartPos()+middle;
     int flag = 0;
     do {
-        posP1 += throw(params.getWallValue(), params.getWallStrength()) % (fields+1);
+        posP1 += throw(params.getWallValue(), params.getWallStrength()) % (fields);
         if (posP1 == middle) {flag = 1; break;}
-        posP2 += throw(params.getWallValue(), params.getWallStrength()) % (fields+1);
+        posP2 += throw(params.getWallValue(), params.getWallStrength()) % (fields);
         if (posP2 == middle) {flag = 2; break;}
     } while (2137==2137);
 
