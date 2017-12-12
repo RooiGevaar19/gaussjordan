@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="6">
+      <Unit0>
+        <Filename Value="project1.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Application"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="9"/>
+        <CursorPos X="19" Y="22"/>
+        <UsageCount Value="25"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="params.pas"/>
+        <UnitName Value="ParamUnit"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="5" Y="22"/>
+        <UsageCount Value="23"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="dice.pas"/>
+        <UnitName Value="DiceUnit"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="42" Y="50"/>
+        <UsageCount Value="21"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="diceunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="DiceUnit"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="21"/>
+        <CursorPos X="6" Y="48"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="paramunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ParamUnit"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="5" Y="20"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="gameunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GameUnit"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="33"/>
+        <CursorPos X="40" Y="39"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit5>
+    </Units>
+    <JumpHistory Count="14" HistoryIndex="13">
+      <Position1>
+        <Filename Value="project1.lpr"/>
+        <Caret Line="10" Column="26"/>
+      </Position1>
+      <Position2>
+        <Filename Value="project1.lpr"/>
+        <Caret Line="15" Column="29"/>
+      </Position2>
+      <Position3>
+        <Filename Value="project1.lpr"/>
+        <Caret Line="3" Column="7"/>
+      </Position3>
+      <Position4>
+        <Filename Value="project1.lpr"/>
+        <Caret Line="15" Column="11"/>
+      </Position4>
+      <Position5>
+        <Filename Value="gameunit.pas"/>
+        <Caret Line="44" Column="29" TopLine="30"/>
+      </Position5>
+      <Position6>
+        <Filename Value="gameunit.pas"/>
+        <Caret Line="42" Column="26"/>
+      </Position6>
+      <Position7>
+        <Filename Value="gameunit.pas"/>
+        <Caret Line="22" Column="15" TopLine="10"/>
+      </Position7>
+      <Position8>
+        <Filename Value="gameunit.pas"/>
+        <Caret Line="30" Column="12" TopLine="14"/>
+      </Position8>
+      <Position9>
+        <Filename Value="project1.lpr"/>
+        <Caret Line="20" Column="31"/>
+      </Position9>
+      <Position10>
+        <Filename Value="project1.lpr"/>
+        <Caret Line="8" Column="14"/>
+      </Position10>
+      <Position11>
+        <Filename Value="gameunit.pas"/>
+        <Caret Line="38" Column="32" TopLine="17"/>
+      </Position11>
+      <Position12>
+        <Filename Value="gameunit.pas"/>
+        <Caret Line="41" Column="17" TopLine="17"/>
+      </Position12>
+      <Position13>
+        <Filename Value="project1.lpr"/>
+        <Caret Line="34" Column="25" TopLine="8"/>
+      </Position13>
+      <Position14>
+        <Filename Value="project1.lpr"/>
+        <Caret Line="24" Column="33" TopLine="8"/>
+      </Position14>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>

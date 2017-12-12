@@ -143,10 +143,10 @@ int startGame(Params params) {
     return flag;
 }
 
-double doSimulation(int tries) {
-    Params params ("input");
+double doSimulation(Params params, int tries) {
     vector<int> result(tries);
     for (int i = 0; i < tries; i++) {
+        printf("new game");
         result[tries] = startGame(params);
     }
     return avg(result);
@@ -156,8 +156,10 @@ int main() {
     srand(time(NULL));
     printf("\n");
     Params params ("input");
-    vector<int> dice;
-    dice = renderDice(params);
-    for (int i = 0; i < dice.size(); i++) printf("%d\t", dice[i]);
+    //vector<int> dice = renderDice(params);
+    //for (int i = 0; i < dice.size(); i++) printf("%d\t", dice[i]);
+    //printf("\n");
+    printf("new simulation\n");
+    printf("%lf\n", doSimulation(params, 100));
     return 0;
 }
