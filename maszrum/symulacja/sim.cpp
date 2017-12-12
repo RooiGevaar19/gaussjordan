@@ -1,6 +1,11 @@
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
+#include <ctime>
 #include <vector>
+#include <cmath>
+
+using namespace std;
 
 class Params {
     private:
@@ -13,26 +18,26 @@ class Params {
         int* wall;
         int* prop;
     public:
-        Params (string input) {
-            fp = fopen(input.c_str(), "r");
-            fscanf(fp, "%i\n", fieldsCount);
-            //fscanf(fp, "%i", mushCount);
+        Params(char* input) {
+            FILE *fp = fopen(input, "r");
+            fscanf(fp, "%d\n", &fieldsCount);
+            //fscanf(fp, "%d", mushCount);
             //*mush = new int [mushCount];
             //for (int i = 0; i < mushcount; i++) {
-            //    fscanf(fp, "\t%i", mush[i]);
+            //    fscanf(fp, "\t%d", mush[i]);
             //}
-            fscanf(fp, "%i\t%i\n", p1start, p2start);
-            fscanf(fp, "%i\n", wallCount);
-            *wall = new int [wallCount];
-            fscanf(fp, "%i", wall[0]);
+            fscanf(fp, "%d\t%d\n", &p1start, &p2start);
+            fscanf(fp, "%d\n", &wallCount);
+            wall = new int[wallCount];
+            fscanf(fp, "%d", &(wall[0]));
             for (int i = 1; i < wallCount; i++) {
-                fscanf(fp, "\t%i", wall[i]);
+                fscanf(fp, "\t%d", &(wall[i]));
             }
             fscanf(fp, "\n");
-            *prop = new int [wallCount];
-            fscanf(fp, "%i", prop[0]);
+            prop = new int[wallCount];
+            fscanf(fp, "%d", &(prop[0]));
             for (int i = 1; i < wallCount; i++) {
-                fscanf(fp, "\t%i", prop[i]);
+                fscanf(fp, "\t%d", &(prop[i]));
             }
             fscanf(fp, "\n");
             fclose(fp);
@@ -40,8 +45,8 @@ class Params {
 
         ~Params() {
             //delete mush;
-            delete wall;
-            delete prop;
+            delete[] wall;
+            delete[] prop;
         }
 
         int getFieldsCount() {
@@ -64,10 +69,6 @@ class Params {
             return p2start;
         }
 
-        int getFieldsCount() {
-            return fieldsCount;
-        }
-
         int getWallCount() {
             return wallCount;
         }
@@ -82,10 +83,10 @@ class Params {
 
         int getSumStrength() {
             int s = 0;
-        	for (int i = 0; i < t.size(); i++) s += prop[i];
+        	for (int i = 0; i < getWallCount(); i++) s += prop[i];
             return s;
         }
-}
+};
 
 int sum(vector<int>& t) {
     int s = 0;
@@ -101,28 +102,28 @@ int div(int n) {
     return round(n/2);
 }
 
-Vector<int> renderDice(Params params) {
-    Vector<int> dice (params.getSumStrength);
-    for (int i = 0, j = 0; i < params.getWallCount; i++) {
+vector<int> renderDice(Params params) {
+    vector<int> dice (params.getSumStrength());
+    for (int i = 0, j = 0; (i < params.getWallCount() && j < params.getSumStrength()); i++) {
         for (int k = 0; k < params.getWallStrength(i); k++) {
-            dice[j] = prop[i];
+            dice[j] = params.getWallValue(i);
             j++;
         }
     }
     return dice;
 }
 
-int throwDice(Vector<int> dice) {
-
+int throwDice(vector<int> dice) {
+    return dice[rand()%(dice.size())];
 }
 
 int startGame(Params params) {
-    int fields = 2*(params.getFieldsCount)+1;
+    int fields = 2*(params.getFieldsCount())+1;
     int middle = div(fields);
     int posP1 = params.getP1StartPos()+middle;
     int posP2 = params.getP2StartPos()+middle;
     int flag = 0;
-    Vector<int> dice;
+    vector<int> dice;
     dice = renderDice(params);
     do {
         posP1 += throwDice(dice);
@@ -143,7 +144,7 @@ int startGame(Params params) {
 }
 
 double doSimulation(int tries) {
-    Params params = new Params("input");
+    Params params ("input");
     vector<int> result(tries);
     for (int i = 0; i < tries; i++) {
         result[tries] = startGame(params);
@@ -152,5 +153,11 @@ double doSimulation(int tries) {
 }
 
 int main() {
+    srand(time(NULL));
+    printf("\n");
+    Params params ("input");
+    vector<int> dice;
+    dice = renderDice(params);
+    for (int i = 0; i < dice.size(); i++) printf("%d\t", dice[i]);
     return 0;
 }
