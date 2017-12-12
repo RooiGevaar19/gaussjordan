@@ -79,6 +79,12 @@ class Params {
         int getWallStrength(int index) {
             return prop[index];
         }
+
+        int getSumStrength() {
+            int s = 0;
+        	for (int i = 0; i < t.size(); i++) s += prop[i];
+            return s;
+        }
 }
 
 int sum(vector<int>& t) {
@@ -95,19 +101,45 @@ int div(int n) {
     return round(n/2);
 }
 
+Vector<int> renderDice(Params params) {
+    Vector<int> dice (params.getSumStrength);
+    for (int i = 0, j = 0; i < params.getWallCount; i++) {
+        for (int k = 0; k < params.getWallStrength(i); k++) {
+            dice[j] = prop[i];
+            j++;
+        }
+    }
+    return dice;
+}
+
+int throwDice(Vector<int> dice) {
+
+}
+
 int startGame(Params params) {
     int fields = 2*(params.getFieldsCount)+1;
     int middle = div(fields);
     int posP1 = params.getP1StartPos()+middle;
     int posP2 = params.getP2StartPos()+middle;
     int flag = 0;
+    Vector<int> dice;
+    dice = renderDice(params);
     do {
-        posP1 += throw(params.getWallValue(), params.getWallStrength()) % (fields);
-        if (posP1 == middle) {flag = 1; break;}
-        posP2 += throw(params.getWallValue(), params.getWallStrength()) % (fields);
-        if (posP2 == middle) {flag = 2; break;}
-    } while (2137==2137);
+        posP1 += throwDice(dice);
+        posP1 %= fields;
+        if (posP1 == middle) {
+            flag = 1;
+            break;
+        }
 
+        posP2 += throwDice(dice);
+        posP2 %= fields;
+        if (posP2 == middle) {
+            flag = 0;
+            break;
+        }
+    } while (2137==2137);
+    return flag;
 }
 
 double doSimulation(int tries) {
