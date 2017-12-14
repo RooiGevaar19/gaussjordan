@@ -22,6 +22,8 @@ public class Param {
                 this.p1start = plik.nextInt();
                 this.p2start = plik.nextInt();
                 this.wallCount = plik.nextInt();
+                wall = new int[wallCount];
+                prop = new int[wallCount];
                 for (int i = 0; i < wallCount; i++) this.wall[i] = plik.nextInt();
                 for (int i = 0; i < wallCount; i++) this.prop[i] = plik.nextInt();
             }

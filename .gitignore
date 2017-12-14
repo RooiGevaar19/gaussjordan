@@ -4,3 +4,4 @@ MVE-Test/run-*
 *.zip
 maszrum/symulacja/SimulationFPC/lib
 *.bak
+*.class
