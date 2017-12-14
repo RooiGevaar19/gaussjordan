@@ -32,15 +32,15 @@ public class MatrixGenerator {
     	 for (int k : dic.GetFields()) {
              if (!exists(xs, 
             		 		((xs.get(step).getPlayer()+1)%2), 
-            		 		Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))), fields)-3, 
-            		 		Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))), fields)-3
+            		 		Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+3), fields)-3, 
+            		 		Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))+3), fields)-3
             		 		)) {
             	 anythingleft = true;
                  xs.add(new Entry(
                 		 i+2, 
                 		 ((xs.get(step).getPlayer()+1)%2), 
-                		 Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))), fields)-3, 
-                		 Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))), fields)-3
+                		 Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+3), fields)-3, 
+                		 Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))+3), fields)-3
                 		 ));
                  i++;
              }
