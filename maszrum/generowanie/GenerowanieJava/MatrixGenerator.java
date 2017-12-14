@@ -24,6 +24,7 @@ public class MatrixGenerator {
      List<Entry> xs = new ArrayList<Entry>();
      int step = 0;
      int i = 0;
+     int fields = 2*(par.getFieldsCount())+1;
      xs.add(new Entry(i+1, 0, par.getP1StartPos(), par.getP2StartPos()));
      boolean anythingleft;
      do {
@@ -31,15 +32,15 @@ public class MatrixGenerator {
     	 for (int k : dic.GetFields()) {
              if (!exists(xs, 
             		 		((xs.get(step).getPlayer()+1)%2), 
-            		 		(xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2)), 
-            		 		(xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))
+            		 		Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))), fields)-3, 
+            		 		Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))), fields)-3
             		 		)) {
             	 anythingleft = true;
                  xs.add(new Entry(
-                		 i+1, 
+                		 i+2, 
                 		 ((xs.get(step).getPlayer()+1)%2), 
-                		 (xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2)), 
-                		 (xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))
+                		 Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))), fields)-3, 
+                		 Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))), fields)-3
                 		 ));
                  i++;
              }
