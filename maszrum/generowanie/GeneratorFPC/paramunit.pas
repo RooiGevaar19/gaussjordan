@@ -51,6 +51,7 @@ begin
      //SetLength(prop, 0);
      wall := nil;
      prop := nil;
+    //self.Free;
 end;
 
 procedure Parameter.Load(inp : String);
