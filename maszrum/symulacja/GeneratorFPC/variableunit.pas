@@ -8,7 +8,7 @@ uses
   Classes, SysUtils;
 
 type
-    Variable : class(TObject)
+    Variable = class(TObject)
     var
     public
       constructor Create; overload;
