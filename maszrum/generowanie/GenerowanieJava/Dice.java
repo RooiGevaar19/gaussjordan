@@ -7,7 +7,7 @@ public class Dice {
         values = new int[params.getSumStrength()];
         int j = 0;
         for (int i = 0; i < params.getWallCount(); i++) {
-            for (int k = 0; i < params.getWallStrength(i); k++) {
+            for (int k = 1; k <= params.getWallStrength(i); k++) {
                  values[j] = params.getWallValue(i);
                  j++;
             }

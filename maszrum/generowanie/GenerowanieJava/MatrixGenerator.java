@@ -22,28 +22,33 @@ public class MatrixGenerator {
      Param par = new Param("./input");
      Dice dic = new Dice(par);
      List<Entry> xs = new ArrayList<Entry>();
+     int step = 0;
      int i = 0;
      xs.add(new Entry(i+1, 0, par.getP1StartPos(), par.getP2StartPos()));
-     for (Entry j : xs) {
-         for (int k : dic.GetFields()) {
+     boolean anythingleft;
+     do {
+         anythingleft = false;
+    	 for (int k : dic.GetFields()) {
              if (!exists(xs, 
-            		 		((j.getPlayer()+1)%2), 
-            		 		(j.getPosP1())+(k+((j.getPlayer()+1)%2)), 
-            		 		(j.getPosP2())+(k+((j.getPlayer())%2))
+            		 		((xs.get(step).getPlayer()+1)%2), 
+            		 		(xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2)), 
+            		 		(xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))
             		 		)) {
+            	 anythingleft = true;
                  xs.add(new Entry(
-                		 i+2, 
-                		 ((j.getPlayer()+1)%2), 
-                		 (j.getPosP1())+(k+((j.getPlayer()+1)%2)), 
-                		 (j.getPosP2())+(k+((j.getPlayer())%2))
+                		 i+1, 
+                		 ((xs.get(step).getPlayer()+1)%2), 
+                		 (xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2)), 
+                		 (xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))
                 		 ));
                  i++;
              }
          }
-     }
+         step++;
+     } while (anythingleft);
 
      for (Entry v : xs) {
-    	 System.out.println("Var "+(v.getID()+1)+" - P"+(v.getPlayer()+1)
+    	 System.out.println("Var "+(v.getID())+" - P"+(v.getPlayer()+1)
     			 +" ("+(v.getPosP1())
     			 +", "+(v.getPosP2())
     			 +") ");
