@@ -26,9 +26,13 @@ public class Param {
                 prop = new int[wallCount];
                 for (int i = 0; i < wallCount; i++) this.wall[i] = plik.nextInt();
                 for (int i = 0; i < wallCount; i++) this.prop[i] = plik.nextInt();
+                try {
+                    fr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            fr.close();
-        } catch (FileNotFoundException | IOException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -58,7 +62,7 @@ public class Param {
         return this.prop[index];
     }
 
-    int getSumStrength(int index) {
+    int getSumStrength() {
         int s = 0;
         for (int i = 0; i < this.wallCount; i++) s += prop[i];
         return s;
