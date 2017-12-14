@@ -32,6 +32,7 @@ public class Param {
                     e.printStackTrace();
                 }
             }
+            plik.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
