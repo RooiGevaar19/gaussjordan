@@ -9,26 +9,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Application"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="9"/>
-        <CursorPos X="19" Y="22"/>
+        <CursorPos X="71" Y="35"/>
         <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
-        <Filename Value="params.pas"/>
-        <UnitName Value="ParamUnit"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="5" Y="22"/>
-        <UsageCount Value="23"/>
-      </Unit1>
-      <Unit2>
-        <Filename Value="dice.pas"/>
-        <UnitName Value="DiceUnit"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="42" Y="50"/>
-        <UsageCount Value="21"/>
-      </Unit2>
-      <Unit3>
         <Filename Value="diceunit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="DiceUnit"/>
@@ -37,8 +22,8 @@
         <CursorPos X="6" Y="48"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
-      </Unit3>
-      <Unit4>
+      </Unit1>
+      <Unit2>
         <Filename Value="paramunit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ParamUnit"/>
@@ -46,19 +31,33 @@
         <CursorPos X="5" Y="20"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
-      </Unit4>
-      <Unit5>
+      </Unit2>
+      <Unit3>
         <Filename Value="gameunit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GameUnit"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="33"/>
-        <CursorPos X="40" Y="39"/>
+        <TopLine Value="10"/>
+        <CursorPos X="61" Y="22"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="params.pas"/>
+        <UnitName Value="ParamUnit"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="5" Y="22"/>
+        <UsageCount Value="23"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="dice.pas"/>
+        <UnitName Value="DiceUnit"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="42" Y="50"/>
+        <UsageCount Value="21"/>
       </Unit5>
     </Units>
-    <JumpHistory Count="14" HistoryIndex="13">
+    <JumpHistory Count="16" HistoryIndex="15">
       <Position1>
         <Filename Value="project1.lpr"/>
         <Caret Line="10" Column="26"/>
@@ -115,6 +114,14 @@
         <Filename Value="project1.lpr"/>
         <Caret Line="24" Column="33" TopLine="8"/>
       </Position14>
+      <Position15>
+        <Filename Value="gameunit.pas"/>
+        <Caret Line="61" Column="19" TopLine="8"/>
+      </Position15>
+      <Position16>
+        <Filename Value="gameunit.pas"/>
+        <Caret Line="19" Column="67"/>
+      </Position16>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

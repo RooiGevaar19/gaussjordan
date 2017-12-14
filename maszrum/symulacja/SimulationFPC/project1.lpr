@@ -3,12 +3,12 @@ program Application;
 uses ParamUnit, DiceUnit, GameUnit;
 
 var
-   par       : Parameter;
-   dic       : Dice;
-   game      : GameRound;
-   i, n      : Integer;
-   result    : Real;
-   count     : Real;
+   par        : Parameter;
+   dic        : Dice;
+   game       : GameRound;
+   i, n, step : Integer;
+   result     : Real;
+   count      : Real;
 
 begin
      n := 1000;
@@ -26,13 +26,13 @@ begin
         count := 0.0;
         for i := 1 to n do
         begin
-             if (game.Play(dic, par)) then
+             if (game.Play(dic, par, step)) then
              begin
-                  writeln(StdErr, i, ' - Player 1 won!');
+                  writeln(StdErr, i, ' - Player 1 won in ', step,' turns!');
                   result := result + 1.0;
                   count := count + 1.0;
              end else begin
-                 writeln(StdErr, i, ' - Player 2 won!');
+                 writeln(StdErr, i, ' - Player 2 won in ', step,' turns!');
                  count := count + 1.0;
              end;
         end;

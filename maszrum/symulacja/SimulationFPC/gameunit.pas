@@ -16,7 +16,7 @@ type
     public
           constructor Create; overload;
           destructor Destroy; override;
-          function Play(dic : Dice; params : Parameter) : boolean;
+          function Play(dic : Dice; params : Parameter; var steps : Integer) : boolean;
     end;
 
 implementation
@@ -31,17 +31,19 @@ begin
 
 end;
 
-function GameRound.Play(dic : Dice; params : Parameter) : boolean;
+function GameRound.Play(dic : Dice; params : Parameter; var steps : Integer) : boolean;
 var
    flag : boolean;
    tmp  : Integer;
 begin
+     steps := 0;
      fields := 2*params.getFieldsCount()+1;
      middle := fields div 2;
      posP1 := params.getP1StartPos()+middle;
      posP2 := params.getP2StartPos()+middle;
      flag := false;
      repeat
+        inc(steps);
         posP1 := posP1 + dic.Throw();
         posP1 := posP1 mod fields;
         if posP1 = middle then
