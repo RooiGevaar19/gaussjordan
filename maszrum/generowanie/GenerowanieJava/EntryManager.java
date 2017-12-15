@@ -4,6 +4,14 @@ import java.util.List;
 public class EntryManager {
 	private List<Entry> db = new ArrayList<Entry>();
 
+	public List<Entry> getDb() {
+		return db;
+	}
+
+	public void setDb(List<Entry> db) {
+		this.db = db;
+	}
+
 	public List<Entry> getAll() {
 		return db;
 	}
@@ -35,7 +43,7 @@ public class EntryManager {
 	}
 	
 	public Entry findEntryByParams(int player, int posP1, int posP2) {
-		for (Entry i : db) {
+		for (Entry i : getAll()) {
 			if ((player == i.getPlayer())
 				&&(posP1 == i.getPosP1())
 				&&(posP2 == i.getPosP2())
@@ -43,7 +51,7 @@ public class EntryManager {
 				return i;
 			}
 		}
-		return null;
+		return new Entry(0, player, posP1, posP2);
 	}
 	
 	public Entry findEntryByID(int id) {
