@@ -42,5 +42,6 @@ begin
             dic.Destroy;
             par.Destroy;
      end;
+     //readln;
 end.
 
