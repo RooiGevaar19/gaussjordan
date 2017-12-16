@@ -2,6 +2,7 @@ MVE-Test/run-*
 *.csv
 *.pdf
 *.zip
-maszrum/symulacja/SimulationFPC/lib
+maszrum/SymulacjaFPC/lib
 *.bak
 *.class
+*.out

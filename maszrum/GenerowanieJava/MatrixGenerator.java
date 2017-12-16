@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatrixGenerator {
-	
+
 	public static void main(String[] args) {
 
      Param par = new Param("./input");
@@ -17,37 +17,37 @@ public class MatrixGenerator {
     	 do {
     		 anythingleft = false;
     		 for (int k : dic.GetFields()) {
-    			 if (!xs.exists( 
-            		 		((xs.get(step).getPlayer()+1)%2), 
-            		 		Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(), 
+    			 if (!xs.exists(
+            		 		((xs.get(step).getPlayer()+1)%2),
+            		 		Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(),
             		 		Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount()
             		 		)) {
     				 anythingleft = true;
     				 xs.add(new Entry(
-                		 i+2, 
-                		 ((xs.get(step).getPlayer()+1)%2), 
-                		 Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(), 
+                		 i+2,
+                		 ((xs.get(step).getPlayer()+1)%2),
+                		 Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(),
                 		 Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount()
                 		 ));
     				 i++;
     			 }
     		 }
     		 step++;
-    	 } while (anythingleft);	// (i <= 96) dzia³a bez wyj¹tku, no i ofc (anythingleft)
+    	 } while (anythingleft);	// (i <= 96) dziaï¿½a bez wyjï¿½tku, no i ofc (anythingleft)
      } catch (Exception e) {
     	 //System.out.println(i+1);
      }
-     
 
-   // wypisz prawdopodobieñstwa
-//   for (Entry v : xs.getAll()) {
-//  	 System.out.println("Var "+(v.getID())+" - P"+(v.getPlayer()+1)
-//  			 +" ("+(v.getPosP1())
-//  			 +", "+(v.getPosP2())
-//  			 +") ");
-//   }
 
-     // utwórz macierz z prawdopodobieñstw
+   // wypisz prawdopodobieÅ„stwa
+   for (Entry v : xs.getAll()) {
+  	 System.err.println("Var "+(v.getID())+" - P"+(v.getPlayer()+1)
+  			 +" ("+(v.getPosP1())
+  			 +", "+(v.getPosP2())
+  			 +") ");
+   }
+
+     // utwÃ³rz macierz z prawdopodobieÅ„stw
      double[][] output = new double[xs.getCount()][xs.getCount()+2];
      for (int x = 0; x < xs.getCount(); x++) {
     	 for (int y = 0; y < xs.getCount()+2; y++) {
@@ -61,48 +61,30 @@ public class MatrixGenerator {
     	 output[v.getID()-1][v.getID()] = 1;
     	 for (int k : dic.GetFields()) {
 			 if (xs.exists(
-        		 		((v.getPlayer()+1)%2), 
-        		 		Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(), 
+        		 		((v.getPlayer()+1)%2),
+        		 		Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(),
         		 		Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount()
         		 		)) {
-				 
+
 				 int as = xs.findIDByParams(
-						 ((v.getPlayer()+1)%2), 
-						 Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(), 
+						 ((v.getPlayer()+1)%2),
+						 Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(),
 						 Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount()
 						 );
-				 
+
 				Entry insert = xs.findEntryByID(as);
-				 
-//				 int player = (v.getPlayer()+1)%2;
-//				 int posP1 = Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
-//				 int posP2 = Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
-//				 
-//				 Entry insert = xd.findEntryByParams(player, posP1, posP2);
-				 
-				 
-				 
-//				 System.out.println("Param "+
-//						 String.valueOf(((v.getPlayer()+1)%2))+"\t"+
-//						 String.valueOf(Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount())+"\t"+
-//						 String.valueOf(Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount())+""
-//						 );
-				 
-				 
-//				 System.out.println("Var "+(insert.getID())+" - P"+(insert.getPlayer()+1)
-//		  			 +" ("+(insert.getPosP1())
-//		  			 +", "+(insert.getPosP2())
-//		  			 +") ");
-				 
+
 				 if ((insert.getPosP1() == 0)) {
 					 output[v.getID()-1][xs.getCount()+1] += 1.0/par.getWallCount();
 				 } else {
-					 output[v.getID()-1][insert.getID()] -= 1.0/par.getWallCount(); 
+					 output[v.getID()-1][insert.getID()] -= 1.0/par.getWallCount();
 				 }
 			 }
 		 }
      }
-     
+
+	 System.out.println(xs.getCount());
+	 System.out.println(xs.getCount()+1);
      // wypisanie macierzy
      for (int x = 0; x < xs.getCount(); x++) {
     	 System.out.print(""+output[x][1]+"");
@@ -111,9 +93,9 @@ public class MatrixGenerator {
     	 }
     	 System.out.println();
      }
-     
-     
-     // czyszczenie zasobów
+
+
+     // czyszczenie zasobÃ³w
      xs.clear();
      xd.clear();
 	}
