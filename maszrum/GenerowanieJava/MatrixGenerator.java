@@ -17,23 +17,18 @@ public class MatrixGenerator {
     	 do {
     		 anythingleft = false;
     		 for (int k : dic.GetFields()) {
-    			 if (!xs.exists(
-            		 		((xs.get(step).getPlayer()+1)%2),
-            		 		Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(),
-            		 		Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount()
-            		 		)) {
+				 int curplay = ((xs.get(step).getPlayer()+1)%2);
+				 int curpos1 = Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
+				 int curpos2 = Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
+    			 if ((!xs.exists(curplay, curpos1, curpos2))&&(curpos1 != 0)&&(curpos2 != 0)) {
     				 anythingleft = true;
-    				 xs.add(new Entry(
-                		 i+2,
-                		 ((xs.get(step).getPlayer()+1)%2),
-                		 Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(),
-                		 Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount()
-                		 ));
+    				 xs.add(new Entry(i+2, curplay, curpos1, curpos2));
     				 i++;
     			 }
     		 }
     		 step++;
-    	 } while (anythingleft);	// (i <= 96) dzia�a bez wyj�tku, no i ofc (anythingleft)
+    	 //} while (anythingleft);	// (i <= 96) dziala bez wyjatku, no i ofc (anythingleft)
+	 	 } while (2137==2137);
      } catch (Exception e) {
     	 //System.out.println(i+1);
      }
@@ -54,31 +49,18 @@ public class MatrixGenerator {
     		 output[x][y] = 0.0;
     	 }
      }
-     EntryManager xd = new EntryManager();
-     xd.setDb(xs.getDb());
      for (Entry v : xs.getAll()) {
     	 output[v.getID()-1][0] = v.getID();
     	 output[v.getID()-1][v.getID()] = 1;
     	 for (int k : dic.GetFields()) {
-			 if (xs.exists(
-        		 		((v.getPlayer()+1)%2),
-        		 		Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(),
-        		 		Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount()
-        		 		)) {
-
-				 int as = xs.findIDByParams(
-						 ((v.getPlayer()+1)%2),
-						 Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount(),
-						 Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount()
-						 );
-
-				Entry insert = xs.findEntryByID(as);
-
-				 if ((insert.getPosP1() == 0)) {
-					 output[v.getID()-1][xs.getCount()+1] += 1.0/par.getWallCount();
-				 } else {
-					 output[v.getID()-1][insert.getID()] -= 1.0/par.getWallCount();
-				 }
+			 int curplay = ((v.getPlayer()+1)%2);
+			 int curpos1 = Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
+			 int curpos2 = Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
+			 if (curpos1 == 0) {
+				 output[v.getID()-1][xs.getCount()+1] += 1.0/par.getWallCount();
+			 } else if (xs.exists(curplay, curpos1, curpos2)) {
+				Entry insert = xs.findEntryByParams(curplay, curpos1, curpos2);
+				output[v.getID()-1][insert.getID()] -= 1.0/par.getWallCount();
 			 }
 		 }
      }
@@ -97,6 +79,5 @@ public class MatrixGenerator {
 
      // czyszczenie zasobów
      xs.clear();
-     xd.clear();
 	}
 }
