@@ -1,2 +1,2 @@
 #!/bin/bash
-java MatrixGenerator > ../ObliczanieCpp/input
+java MatrixGenerator $1 $2

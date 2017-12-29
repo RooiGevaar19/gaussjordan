@@ -5,8 +5,13 @@ public class MatrixGenerator {
 
 	public static void main(String[] args) {
 
-     Param par = new Param("./input");
+	 System.err.println("=== GENERATION ===");
+     Param par = new Param(args[0]);
+	 par.setFieldsCount(Integer.parseInt(args[1]));
+	 par.setP1StartPos(Integer.parseInt(args[1]));
+	 par.setP2StartPos(Integer.parseInt(args[1])*(-1));
      Dice dic = new Dice(par);
+
      EntryManager xs = new EntryManager();
      int step = 0;
      int i = 0;

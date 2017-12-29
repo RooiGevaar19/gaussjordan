@@ -64,6 +64,7 @@ begin
      AssignFile(input, inp);
      Reset(input);
 
+     {*
      // liczba pól
      readln(input, tmp);
      self.setFieldsCount(StrToInt(tmp));
@@ -78,6 +79,7 @@ begin
      p1start := StrToInt(L.Strings[0]);
      p2start := StrToInt(L.Strings[1]);
      L.Free;
+     *}
 
      // liczba ścian
      readln(input, wallCount);

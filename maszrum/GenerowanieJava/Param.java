@@ -18,9 +18,9 @@ public class Param {
             fr = new FileReader(inp);
             Scanner plik = new Scanner(fr);
             while (plik.hasNext()) {
-                this.fieldsCount = plik.nextInt();
-                this.p1start = plik.nextInt();
-                this.p2start = plik.nextInt();
+                //this.fieldsCount = plik.nextInt();
+                //this.p1start = plik.nextInt();
+                //this.p2start = plik.nextInt();
                 this.wallCount = plik.nextInt();
                 wall = new int[wallCount];
                 prop = new int[wallCount];

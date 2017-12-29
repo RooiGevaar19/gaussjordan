@@ -388,11 +388,11 @@ private:
         }
 };
 
-int main() {
+int main(int argc, char** argv) {
     MyMatrix<double> M (1, 2, 0.0);
-    M.loadFromFile("input");
+    M.loadFromFile(argv[1]);
     vector<double> res;
     res = M.solveGaussPartial();
-    for (int i = 0; i < res.size(); i++) cout << res[i] << endl;
+    /*for (int i = 0; i < res.size(); i++)*/ cout << res[0] << endl;
     return 0;
 }

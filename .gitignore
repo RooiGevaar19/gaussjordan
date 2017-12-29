@@ -6,3 +6,4 @@ maszrum/SymulacjaFPC/lib
 *.bak
 *.class
 *.out
+*.log
