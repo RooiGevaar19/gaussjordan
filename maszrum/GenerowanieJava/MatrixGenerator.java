@@ -62,10 +62,10 @@ public class MatrixGenerator {
 			 int curpos1 = Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
 			 int curpos2 = Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
 			 if (curpos1 == 0) {
-				 output[v.getID()-1][xs.getCount()+1] += 1.0/par.getWallCount();
+				 output[v.getID()-1][xs.getCount()+1] += 1.0/par.getSumStrength();
 			 } else if (xs.exists(curplay, curpos1, curpos2)) {
 				Entry insert = xs.findEntryByParams(curplay, curpos1, curpos2);
-				output[v.getID()-1][insert.getID()] -= 1.0/par.getWallCount();
+				output[v.getID()-1][insert.getID()] -= 1.0/par.getSumStrength();
 			 }
 		 }
      }
