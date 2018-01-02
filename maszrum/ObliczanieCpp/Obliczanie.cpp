@@ -361,6 +361,7 @@ private:
             return x;
         }
 
+<<<<<<< HEAD
         // metoda eliminacji Gaussa z częściowym wyborem
         MyMatrix<T>& solveGaussPartialSelf() {
             int n = getRowCount();
@@ -432,10 +433,14 @@ private:
         }
 
         vector<T> solveJacobi(){
+=======
+        vector<T> solveJacobi(int littleTim){
+          int Timmy = 0;
+>>>>>>> a2aef9330d855a247c1fbad73e61fcf8c45d3c2a
           int n = getRowCount();
           int m = getColCount();
-          MyMatrix<T> D(n, n, 0.0);
-          MyMatrix<T> Tj(n, n, 0.0);
+          T D[n][n] = {0};
+          T Tj[n][n] = {0};
           vector<T> Fj(n);
 
           for (int i = 0; i < n; i++){
@@ -449,11 +454,16 @@ private:
 
           vector<T> x(n, 0.0);
           vector<T> y(n, 0.0);
-          for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++)
-              y[i] += Tj[i][j] * x[j];
-            y[i] += Fj[i];
+          while (Timmy != littleTim){
+            for (int i = 0; i < n; i++){
+              for (int j = 0; j < n; j++)
+                y[i] += Tj[i][j] * x[j];
+              y[i] += Fj[i];
+            }
+            x = y;
+            Timmy++;
           }
+
 
         }
 
@@ -488,7 +498,7 @@ int main(int argc, char** argv) {
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
-    res = M.solveJacobi();
+    res = M.solveJacobi(5);
     /*for (int i = 0; i < res.size(); i++)*/ cout << res[0] << endl;
     return 0;
 }
