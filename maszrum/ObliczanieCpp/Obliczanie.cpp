@@ -361,6 +361,32 @@ private:
             return x;
         }
 
+        vector<T> solveJacobi(){
+          int n = getRowCount();
+          int m = getColCount();
+          MyMatrix<T> D(n, n, 0.0);
+          MyMatrix<T> Tj(n, n, 0.0);
+          vector<T> Fj(n);
+
+          for (int i = 0; i < n; i++){
+            D[i][i] = 1 / matrix[i][i]; // D^-1
+            Fj[i] = D[i][i] * matrix[i][m]; // D^-1 * B
+            for (int j = 0; j < n; j++){
+              if (i != j)
+                Tj[i][j] = D[i][i] * (-matrix[i][j]); // D^-1 * (L + U)
+            }
+          }
+
+          vector<T> x(n, 0.0);
+          vector<T> y(n, 0.0);
+          for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++)
+              y[i] += Tj[i][j] * x[j];
+            y[i] += Fj[i];
+          }
+
+        }
+
         // ładowanie z pliku
         void loadFromFile(string fileName) {
             int x, y;
@@ -392,7 +418,7 @@ int main(int argc, char** argv) {
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
-    res = M.solveGaussPartial();
+    res = M.solveJacobi();
     /*for (int i = 0; i < res.size(); i++)*/ cout << res[0] << endl;
     return 0;
 }
