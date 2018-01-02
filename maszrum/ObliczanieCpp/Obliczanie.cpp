@@ -361,6 +361,76 @@ private:
             return x;
         }
 
+        // metoda eliminacji Gaussa z częściowym wyborem
+        MyMatrix<T>& solveGaussPartialSelf() {
+            int n = getRowCount();
+            for (int i = 0; i < n; i++) {
+                // znajdź wiersz z maksymalnym elementem
+                T maxEl = abs(this->matrix[i][i]);
+                int maxRow = i;
+                for (int k = i+1; k < n; k++) {
+                    if (abs(this->matrix[k][i]) > this->maxEl) {
+                        maxEl = abs(this->matrix[k][i]);
+                        maxRow = k;
+                    }
+                }
+                // zamień maksymalny wiersz z obecnym
+                for (int k = i; k < n+1; k++) {
+                    T pom = this->matrix[maxRow][k];
+                    this->matrix[maxRow][k] = this->matrix[i][k];
+                    this->matrix[i][k] = pom;
+                }
+                // wyprowadź zera przed obecnym wierszem
+                for (int k = i+1; k < n; k++) {
+                    T c = -(this->matrix[k][i]) / this->matrix[i][i];
+                    for (int j = i; j < n+1; j++) {
+                        if (i == j) {
+                            this->matrix[k][j] = 0;
+                        } else {
+                            this->matrix[k][j] += c * this->matrix[i][j];
+                        }
+                    }
+                }
+            }
+            return *this;
+        }
+
+        // odwrocenie macierzy (metoda eliminacji Gaussa z częściowym wyborem)
+        MyMatrix<T>& invert() {
+            int n = getRowCount();
+            // jeżeli jest kwadratowa
+            if (n == getColCount()) {
+                MyMatrix<T> M(n, n*2, 0.0);
+                // utwórz macierz rozszerzona [A|I]
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < n; j++) {
+                        M.setAt(i, j, this.getAt(i,j));
+                    }
+                }
+
+                for (int i = 0; i < n; i++) {
+                    for (int j = n; j < 2*n; j++) {
+                        if (i == j-n) {
+                            M.setAt(i, j, 1.0);
+                        } else {
+                            M.setAt(i, j, 0.0);
+                        }
+                    }
+                }
+
+                // przekształć macierz aby wynieść macierz [I|B]
+                M.solveGaussPartialSelf();
+
+                // wynieś macierz B z przekształcenia
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < n; j++) {
+                        this.setAt(i, j, M.getAt(i,j+n));
+                    }
+                }
+            }
+            return *this;
+        }
+
         vector<T> solveJacobi(){
           int n = getRowCount();
           int m = getColCount();
