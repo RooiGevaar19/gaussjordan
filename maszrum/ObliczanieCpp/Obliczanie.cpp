@@ -364,8 +364,8 @@ private:
         vector<T> solveJacobi(){
           int n = getRowCount();
           int m = getColCount();
-          MyMatrix<T> D(n, n, 0.0);
-          MyMatrix<T> Tj(n, n, 0.0);
+          T D[n][n];
+          T Tj[n][n];
           vector<T> Fj(n);
 
           for (int i = 0; i < n; i++){
