@@ -15,6 +15,19 @@ using namespace Eigen;
 int tries = 10;
 int max_grade = 1000;
 
+template <typename T>
+vector<T> operator+(const vector<T>& a, const vector<T>& b)
+{
+    assert(a.size() == b.size());
+
+    vector<T> result;
+    result.reserve(a.size());
+
+    transform(a.begin(), a.end(), b.begin(),
+                   back_inserter(result), plus<T>());
+    return result;
+}
+
 template <typename T> class MyMatrix {
 private:
     vector<vector<T> > matrix;
@@ -361,7 +374,6 @@ private:
             return x;
         }
 
-<<<<<<< HEAD
         // metoda eliminacji Gaussa z częściowym wyborem
         MyMatrix<T>& solveGaussPartialSelf() {
             int n = getRowCount();
@@ -432,39 +444,42 @@ private:
             return *this;
         }
 
-        vector<T> solveJacobi(){
-=======
-        vector<T> solveJacobi(int littleTim){
-          int Timmy = 0;
->>>>>>> a2aef9330d855a247c1fbad73e61fcf8c45d3c2a
-          int n = getRowCount();
-          int m = getColCount();
-          T D[n][n] = {0};
-          T Tj[n][n] = {0};
-          vector<T> Fj(n);
-
-          for (int i = 0; i < n; i++){
-            D[i][i] = 1 / matrix[i][i]; // D^-1
-            Fj[i] = D[i][i] * matrix[i][m]; // D^-1 * B
-            for (int j = 0; j < n; j++){
-              if (i != j)
-                Tj[i][j] = D[i][i] * (-matrix[i][j]); // D^-1 * (L + U)
+        vector<T> solveJacobi(int littleTim) {
+            int n = getRowCount();
+            // wynieś macierz główną bez elementów diagonalnych
+            MyMatrix<T> LU (n, n, 0.0);
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (i != j) {
+                        LU.setAt(i, j, (this->getAt(i, j))*(-1));
+                    }
+                }
             }
-          }
 
-          vector<T> x(n, 0.0);
-          vector<T> y(n, 0.0);
-          while (Timmy != littleTim){
-            for (int i = 0; i < n; i++){
-              for (int j = 0; j < n; j++)
-                y[i] += Tj[i][j] * x[j];
-              y[i] += Fj[i];
+            // wynieś macierz diagonalną
+            MyMatrix<T> D (n, n, 0.0);
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (i == j) {
+                        D.setAt(i, j, 1.0/(this->getAt(i, j)));
+                    }
+                }
             }
-            x = y;
-            Timmy++;
-          }
 
+            // utwórz wektor rozwiązania
+            vector<T> X (n, 0.0);
 
+            // wynieś macierz elementów wolnych
+            vector<T> B (n, 0.0);
+            for (int i = 0; i < n; i++) {
+                B[i] = this->matrix[i][n];
+            }
+
+            // iteruj
+            for (int Timmy = 0; Timmy < littleTim; Timmy++) {
+                X = (D*LU)*X + (D*B);
+            }
+            return X;
         }
 
         // ładowanie z pliku
@@ -498,7 +513,12 @@ int main(int argc, char** argv) {
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
-    res = M.solveJacobi(5);
-    /*for (int i = 0; i < res.size(); i++)*/ cout << res[0] << endl;
+    res = M.solveJacobi(100);
+    /*
+    for (int i = 0; i < res.size(); i++) cout << res[i] << endl;
+    */
+    ///*
+    cout << res[0] << endl;
+    //*/
     return 0;
 }
