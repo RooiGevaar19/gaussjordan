@@ -490,11 +490,13 @@ private:
             // utwórz wektor rozwiązania
             vector<T> X (n, 0.0);
 
-
-
             // iteruj
             for (int Timmy = 0; Timmy < littleTim; Timmy++) {
                 X = Tj*X + Fj;
+                for (int i = 0; i < n; i++){
+                  printf("x%d = %f\t", i+1, X[i]);
+                }
+                cout << "\n";
             }
             return X;
         }
@@ -502,42 +504,67 @@ private:
         vector<T> solveGaussSeidel(int littleTim){
           int n = getRowCount();
           // wynieś macierz główną bez elementów diagonalnych
-          MyMatrix<T> LU (n, n, 0.0);
+          MyMatrix<T> L (n, n, 0.0);
           for (int i = 0; i < n; i++) {
               for (int j = 0; j < n; j++) {
-                  if (i != j) {
-                      LU.setAt(i, j, (this->getAt(i, j))*(-1));
+                  if (i > j) {
+                      L.setAt(i, j, (this->getAt(i, j))*(-1));
                   }
               }
           }
-
+          MyMatrix<T> U (n, n, 0.0);
+          for (int i = 0; i < n; i++) {
+              for (int j = 0; j < n; j++) {
+                  if (i < j) {
+                      U.setAt(i, j, (this->getAt(i, j))*(-1));
+                  }
+              }
+          }
           // wynieś macierz diagonalną
           MyMatrix<T> D (n, n, 0.0);
           for (int i = 0; i < n; i++) {
               for (int j = 0; j < n; j++) {
                   if (i == j) {
-                      D.setAt(i, j, 1.0/(this->getAt(i, j)));
+                      D.setAt(i, j, this->getAt(i, j));
                   }
               }
           }
 
-          // utwórz wektor rozwiązania
-          vector<T> X (n, 0.0);
+          //wynieś macierz przeciwną DL = (D - L)^-1
+          MyMatrix<T> DL (n, n, 0.0);
+          DL = D - L;
+          for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+              DL.setAt(i, j, 1.0/(DL.getAt(i, j)));
+            }
+          }
 
+          // utwórz wektory rozwiązania
+          vector<T> X (n, 0.0);
+          vector<T> Y (n, 0.0);
           // wynieś macierz elementów wolnych
           vector<T> B (n, 0.0);
           for (int i = 0; i < n; i++) {
               B[i] = this->matrix[i][n];
           }
 
-          for (int Timmy = 0; Timmy < littleTim; Timmy++) {
-            for (int i = 0; i < n; i++){
-              for (int j = 0; j < n; j++){
-                if (i != j)
-                  X[i] += ((D.getAt(i, i))*(LU.getAt(i,j)))*X[j];
-              }
-              X[i] += (D.getAt(i,i)*(B[i]));
+          //wynieś macierz Tg i wektor Fg
+          MyMatrix<T> Tg (n, n, 0.0);
+          Tg = DL * U;
+
+          vector<T> Fg (n, 0.0);
+          for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+              Fg[i] += (DL.getAt(i,j) * B[i]);
             }
+          }
+
+          for (int Timmy = 0; Timmy < littleTim; Timmy++) {
+            X = Tg * X + Fg;
+            for (int i = 0; i < n; i++){
+              printf("x%d = %f\t", i+1, X[i]);
+            }
+            cout << "\n";
           }
           return X;
         }
@@ -573,7 +600,7 @@ int main(int argc, char** argv) {
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
-    res = M.solveJacobi(100);
+    res = M.solveGaussSeidel(10);
     /*
     for (int i = 0; i < res.size(); i++) cout << res[i] << endl;
     */
