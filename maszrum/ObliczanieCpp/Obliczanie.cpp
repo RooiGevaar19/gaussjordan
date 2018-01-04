@@ -405,7 +405,7 @@ private:
 
                 T num= 1 / det;
 
-                MyMatrix<T> m_Transpose (getRowCount(), getColCount(), 0.0);
+                MyMatrix<T> m_Transpose (getColCount(), getRowCount(), 0.0);
 
                 m_Transpose = transpose();
 
@@ -545,78 +545,48 @@ private:
         }
 
         vector<T> solveGaussSeidel(int littleTim){
-          int n = getRowCount();
-          // wynieś macierz główną bez elementów diagonalnych
-          MyMatrix<T> L (n, n, 0.0);
-          for (int i = 0; i < n; i++) {
-              for (int j = 0; j < n; j++) {
-                  if (i > j) {
-                      L.setAt(i, j, (this->getAt(i, j))*(-1));
-                  }
-              }
-          }
-          MyMatrix<T> U (n, n, 0.0);
-          for (int i = 0; i < n; i++) {
-              for (int j = 0; j < n; j++) {
-                  if (i < j) {
-                      U.setAt(i, j, (this->getAt(i, j))*(-1));
-                  }
-              }
-          }
-          // wynieś macierz diagonalną
-          MyMatrix<T> D (n, n, 0.0);
-          for (int i = 0; i < n; i++) {
-              for (int j = 0; j < n; j++) {
-                  if (i == j) {
-                      D.setAt(i, j, this->getAt(i, j));
-                  }
-              }
-          }
-
-          //wynieś macierz przeciwną DL = (D - L)^-1
-          MyMatrix<T> DL (n, n, 0.0);
-          for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-              if (i == j){
-                DL.setAt(i, j, D.getAt(i, j));
-              }
-              else{
-                DL.setAt(i, j, L.getAt(i, j));
-              }
+            int n = getRowCount();
+            // inicjalizacja macierzy z elementami przeciwnymi do macierzy A
+            MyMatrix<T> L (n, n, 0.0);
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (i > j) {
+                        L.setAt(i, j, (this->getAt(i, j))*(-1));
+                    }
+                }
             }
-          }
-          DL.display();
-          DL = DL.invert_triangular();
-          DL.display();
-
-          // utwórz wektory rozwiązania
-          vector<T> X (n, 0.0);
-          // wynieś macierz elementów wolnych
-          vector<T> B (n, 0.0);
-          for (int i = 0; i < n; i++) {
-              B[i] = this->matrix[i][n];
-          }
-
-          //wynieś macierz Tg i wektor Fg
-          MyMatrix<T> Tg (n, n, 0.0);
-          Tg = (DL*(-1)) * U;
-
-          vector<T> Fg (n, 0.0);
-          for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-              Fg[i] += (DL.getAt(i,j) * B[i]);
+            MyMatrix<T> U (n, n, 0.0);
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (i < j) {
+                        U.setAt(i, j, (this->getAt(i, j))*(-1));
+                    }
+                }
             }
-        }
+            // wynieś macierz diagonalną
+            MyMatrix<T> D (n, n, 0.0);
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (i == j) {
+                        D.setAt(i, j, (this->getAt(i, j)));
+                    }
+                }
+            }
+            // wynieś macierz elementów wolnych
+            vector<T> B (n, 0.0);
+            for (int i = 0; i < n; i++) {
+                B[i] = this->matrix[i][n];
+            }
 
-          for (int Timmy = 0; Timmy < littleTim; Timmy++) {
-            X = Tg * X + Fg;
-            //X = ((D-L).invert_triangular()*U)*X + ((D-L).invert_triangular()*B);
-            //for (int i = 0; i < n; i++){
-            //  printf("x%d = %f\t", i+1, X[i]);
-            //}
-            //cout << "\n";
-          }
-          return X;
+            // utwórz wektor rozwiązania
+            vector<T> X (n, 0.0);
+
+            ((D - L).invert_triangular()).display();
+            // iteruj
+            for (int Timmy = 0; Timmy < littleTim; Timmy++) {
+                X = ((D - L).invert_triangular()) * U * X + (((D - L).invert_triangular()) * B);
+            }
+            return X;
         }
 
         // ładowanie z pliku
@@ -647,15 +617,6 @@ private:
 };
 
 int main(int argc, char** argv) {
-
-    //MyMatrix<double> papaj (2,2, 0.0);
-    //papaj.setAt(0, 0, 2);
-    //papaj.setAt(0, 1, 1);
-    //papaj.setAt(1, 0, 3);
-    //papaj.setAt(1, 1, 7);
-    //papaj.display();
-    //printf("%lf\n", papaj.determinant());
-
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
