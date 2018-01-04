@@ -249,6 +249,7 @@ private:
             for (int i = 0; i < getRowCount(); i++) {
                 cout << "[ ";
                 for (int j=0; j < getColCount(); j++) {
+                    //cout << " " << getAt(i,j);
                     cout << setw(12) << getAt(i,j);
                 }
                 cout << " ]" << endl;
@@ -375,18 +376,42 @@ private:
         }
 
         // odwrocenie macierzy
-        MyMatrix<T>& invert() {
+        //MyMatrix<T>& invert() {
+        //    MyMatrix<T> inverse_matrix (getRowCount(), getColCount(), 0.0);
+        //    MyMatrix<T> shit (getRowCount(), getColCount(), 0.0);
+        //    T det = determinant();
+        //    if (det == 0) {
+        //        return shit;
+        //    } else {
+        //        T num= 1 / det;
+        //        MyMatrix<T> m_Transpose (getRowCount(), getColCount(), 0.0);
+        //        m_Transpose = transpose();
+        //        for (int i = 1; i <= getRowCount(); i++) {
+        //            for (int j = 1; j <= getColCount(); j++) {
+        //                inverse_matrix.setAt(i,j, num*m_Transpose.getAt(i,j));
+        //            }
+        //        }
+        //    }
+        //    return inverse_matrix;
+        //}
+
+        MyMatrix<T> invert_triangular() {
             MyMatrix<T> inverse_matrix (getRowCount(), getColCount(), 0.0);
             MyMatrix<T> shit (getRowCount(), getColCount(), 0.0);
-            T det = determinant();
-            if (det == 0) {
+            T det = det_triangular();
+            if (det == 0.0) {
                 return shit;
             } else {
+
                 T num= 1 / det;
+
                 MyMatrix<T> m_Transpose (getRowCount(), getColCount(), 0.0);
+
                 m_Transpose = transpose();
-                for (int i = 1; i <= getRowCount(); i++) {
-                    for (int j = 1; j <= getColCount(); j++) {
+
+                for (int i = 0; i < getRowCount(); i++) {
+                    for (int j = 0; j < getColCount(); j++) {
+
                         inverse_matrix.setAt(i,j, num*m_Transpose.getAt(i,j));
                     }
                 }
@@ -394,22 +419,21 @@ private:
             return inverse_matrix;
         }
 
-        MyMatrix<T> minor(int k) {
-            MyMatrix<T> szlug (getRowCount()-1, getColCount()-1, 0.0);
-            int row = 0, col = 0;
-            for (int i = 1; i < getRowCount(); i++) {
-                col = 0;
-                for (int j = 0; i < getColCount(); j++) {
-                    if (j != k) {
-                        szlug.setAt(row, col, getAt(i, j));
-                        col++;
-                    }
-                }
-                row++;
-            }
-            return szlug;
-        }
-
+        //MyMatrix<T> minor(int m) {
+        //    MyMatrix<T> szlug (getRowCount()-1, getColCount()-1, 0.0);
+        //    int row = 0, col = 0;
+        //    for (int j = 1; j < getRowCount(); j++) {
+		//		for (int k = 0; k < getColCount(); k++) {
+		//			if (k < m) {
+		//				szlug.setAt(j - 1, k, matrix[j][k]);
+		//			} else if (k > m) {
+		//				szlug.setAt(j - 1, k - 1, matrix[j][k]);
+		//			}
+		//		}
+        //    }
+        //    return szlug;
+        //}
+        //
         //T determinant() {
         //  T det = 0;
         //  int n = getRowCount();
@@ -431,27 +455,38 @@ private:
         //    return 0.0;
         //  }
         //}
+        //
+        //T determinant() {
+        //    int s;
+        //    if (getRowCount() != getColCount()) {
+        //        return 0.0;
+        //    } else {
+        //        switch (getRowCount()) {
+        //            case 0 : return 0.0;
+        //            case 1 : return getAt(0,0);
+        //            case 2 : return getAt(0,0)*getAt(1,1)-getAt(1,0)*getAt(0,1);
+        //            case 3 : return ((getAt(0,0)*getAt(1,1)*getAt(2,2) + getAt(0,1)*getAt(1,2)*getAt(2,0) + getAt(0,2)*getAt(1,0)*getAt(2,1))
+        //                           -(getAt(2,0)*getAt(1,1)*getAt(0,2) + getAt(0,0)*getAt(2,1)*getAt(1,2) + getAt(2,2)*getAt(1,0)*getAt(0,1)));
+        //            default : {
+        //                s = 0;
+        //                for (int col = 0; col < getColCount(); col++)
+        //                {
+        //                    printf("OK %i\n", col);
+        //                    s += pow(-1.0, col+1.0) * getAt(0, col) * minor(col).determinant();
+        //                    minor(col).display();
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return s;
+        //}
 
-        T determinant() {
-            int s;
-            if (getRowCount() != getColCount()) {
-                return 0.0;
-            } else {
-                switch (getRowCount()) {
-                    case 0 : return 0.0;
-                    case 1 : return getAt(0,0);
-                    case 2 : return getAt(0,0)*getAt(1,1)-getAt(1,0)*getAt(0,1);
-                    case 3 : return ((getAt(0,0)*getAt(1,1)*getAt(2,2) + getAt(0,1)*getAt(1,2)*getAt(2,0) + getAt(0,2)*getAt(1,0)*getAt(2,1))
-                                   -(getAt(2,0)*getAt(1,1)*getAt(0,2) + getAt(0,0)*getAt(2,1)*getAt(1,2) + getAt(2,2)*getAt(1,0)*getAt(0,1)));
-                    default : {
-                        s = 0;
-                        for (int col = 0; col < getColCount(); col++)
-                        {
-                            printf("OK %i\n", col);
-                            s += pow(-1.0, col+1.0) * getAt(0, col) * minor(col).determinant();
-                        }
-                    }
-                }
+        T det_triangular() {
+            vector<T> S;
+            S = diagonalVector();
+            T s = 1.0;
+            for (int i = 0; i < S.size(); i++) {
+                s *= S[i];
             }
             return s;
         }
@@ -505,10 +540,6 @@ private:
             // iteruj
             for (int Timmy = 0; Timmy < littleTim; Timmy++) {
                 X = Tj*X + Fj;
-                for (int i = 0; i < n; i++){
-                  printf("x%d = %f\t", i+1, X[i]);
-                }
-                cout << "\n";
             }
             return X;
         }
@@ -554,11 +585,12 @@ private:
               }
             }
           }
-          DL = DL.invert();
+          DL.display();
+          DL = DL.invert_triangular();
+          DL.display();
 
           // utwórz wektory rozwiązania
           vector<T> X (n, 0.0);
-          vector<T> Y (n, 0.0);
           // wynieś macierz elementów wolnych
           vector<T> B (n, 0.0);
           for (int i = 0; i < n; i++) {
@@ -567,21 +599,22 @@ private:
 
           //wynieś macierz Tg i wektor Fg
           MyMatrix<T> Tg (n, n, 0.0);
-          Tg = DL * U;
+          Tg = (DL*(-1)) * U;
 
           vector<T> Fg (n, 0.0);
           for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
               Fg[i] += (DL.getAt(i,j) * B[i]);
             }
-          }
+        }
 
           for (int Timmy = 0; Timmy < littleTim; Timmy++) {
             X = Tg * X + Fg;
-            for (int i = 0; i < n; i++){
-              printf("x%d = %f\t", i+1, X[i]);
-            }
-            cout << "\n";
+            //X = ((D-L).invert_triangular()*U)*X + ((D-L).invert_triangular()*B);
+            //for (int i = 0; i < n; i++){
+            //  printf("x%d = %f\t", i+1, X[i]);
+            //}
+            //cout << "\n";
           }
           return X;
         }
@@ -615,18 +648,19 @@ private:
 
 int main(int argc, char** argv) {
 
-    MyMatrix<double> papaj (2,2, 0.0);
-    papaj.setAt(0, 0, 2);
-    papaj.setAt(0, 1, 1);
-    papaj.setAt(1, 0, 3);
-    papaj.setAt(1, 1, 7);
-    papaj.display();
-    printf("%lf\n", papaj.determinant());
+    //MyMatrix<double> papaj (2,2, 0.0);
+    //papaj.setAt(0, 0, 2);
+    //papaj.setAt(0, 1, 1);
+    //papaj.setAt(1, 0, 3);
+    //papaj.setAt(1, 1, 7);
+    //papaj.display();
+    //printf("%lf\n", papaj.determinant());
 
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
-    res = M.solveGaussSeidel(5);
+    //M.display();
+    res = M.solveGaussSeidel(100);
     /*
     for (int i = 0; i < res.size(); i++) cout << res[i] << endl;
     */
