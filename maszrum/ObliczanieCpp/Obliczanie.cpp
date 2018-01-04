@@ -405,7 +405,7 @@ private:
 
                 T num= 1 / det;
 
-                MyMatrix<T> m_Transpose (getRowCount(), getColCount(), 0.0);
+                MyMatrix<T> m_Transpose (getColCount(), getRowCount(), 0.0);
 
                 m_Transpose = transpose();
 
@@ -636,15 +636,6 @@ private:
 };
 
 int main(int argc, char** argv) {
-
-    //MyMatrix<double> papaj (2,2, 0.0);
-    //papaj.setAt(0, 0, 2);
-    //papaj.setAt(0, 1, 1);
-    //papaj.setAt(1, 0, 3);
-    //papaj.setAt(1, 1, 7);
-    //papaj.display();
-    //printf("%lf\n", papaj.determinant());
-
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
