@@ -601,9 +601,9 @@ private:
                   Y[i] = Y[i] + ((Tj.getAt(i,j)) * X[j]);
                   X[i] = Y[i];
                 }
-                printf("x%d = %f\t", i+1, Y[i]);
+                //printf("x%d = %f\t", i+1, Y[i]);
               }
-              cout << "\n";
+              //cout << "\n";
           }
           return X;
         }
@@ -640,7 +640,7 @@ int main(int argc, char** argv) {
     M.loadFromFile(argv[1]);
     vector<double> res;
     //M.display();
-    res = M.solveGaussSeidel(100);
+    res = M.solveJacobi(100);
     /*
     for (int i = 0; i < res.size(); i++) cout << res[i] << endl;
     */

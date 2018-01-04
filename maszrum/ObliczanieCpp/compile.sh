@@ -1,4 +1,5 @@
 #!/bin/bash
 
-g++ Obliczanie.cpp -o run -lm -std=c++11
+g++ MyMatrixSeidel.cpp -o run-seidel -lm -std=c++11 -O3
+g++ MyMatrixJacobi.cpp -o run-jacobi -lm -std=c++11 -O3
 
