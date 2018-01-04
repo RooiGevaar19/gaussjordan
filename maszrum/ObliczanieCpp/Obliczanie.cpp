@@ -374,113 +374,86 @@ private:
             return x;
         }
 
-        // metoda eliminacji Gaussa z częściowym wyborem
-        MyMatrix<T>& solveGaussPartialSelf() {
-            int n = getRowCount();
-            for (int i = 0; i < n; i++) {
-                // znajdź wiersz z maksymalnym elementem
-                T maxEl = abs(this->matrix[i][i]);
-                int maxRow = i;
-                for (int k = i+1; k < n; k++) {
-                    if (abs(this->matrix[k][i]) > maxEl) {
-                        maxEl = abs(this->matrix[k][i]);
-                        maxRow = k;
-                    }
-                }
-                // zamień maksymalny wiersz z obecnym
-                for (int k = i; k < n+1; k++) {
-                    T pom = this->matrix[maxRow][k];
-                    this->matrix[maxRow][k] = this->matrix[i][k];
-                    this->matrix[i][k] = pom;
-                }
-                // wyprowadź zera przed obecnym wierszem
-                for (int k = i+1; k < n; k++) {
-                    T c = -(this->matrix[k][i]) / this->matrix[i][i];
-                    for (int j = i; j < n+1; j++) {
-                        if (i == j) {
-                            this->matrix[k][j] = 0;
-                        } else {
-                            this->matrix[k][j] += c * this->matrix[i][j];
-                        }
-                    }
-                }
-            }
-            return *this;
-        }
-
-        // odwrocenie macierzy (metoda eliminacji Gaussa z częściowym wyborem)
+        // odwrocenie macierzy
         MyMatrix<T>& invert() {
-            int n = getRowCount();
-            // jeżeli jest kwadratowa
-            if (n == getColCount()) {
-                MyMatrix<T> M(n, n*2, 0.0);
-                // utwórz macierz rozszerzona [A|I]
-                for (int i = 0; i < n; i++) {
-                    for (int j = 0; j < n; j++) {
-                        M.setAt(i, j, this->getAt(i,j));
+            MyMatrix<T> inverse_matrix (getRowCount(), getColCount(), 0.0);
+            MyMatrix<T> shit (getRowCount(), getColCount(), 0.0);
+            T det = determinant();
+            if (det == 0) {
+                return shit;
+            } else {
+                T num= 1 / det;
+                MyMatrix<T> m_Transpose (getRowCount(), getColCount(), 0.0);
+                m_Transpose = transpose();
+                for (int i = 1; i <= getRowCount(); i++) {
+                    for (int j = 1; j <= getColCount(); j++) {
+                        inverse_matrix.setAt(i,j, num*m_Transpose.getAt(i,j));
                     }
                 }
+            }
+            return inverse_matrix;
+        }
 
-                for (int i = 0; i < n; i++) {
-                    for (int j = n; j < 2*n; j++) {
-                        if (i == j-n) {
-                            M.setAt(i, j, 1.0);
-                        } else {
-                            M.setAt(i, j, 0.0);
+        MyMatrix<T> minor(int k) {
+            MyMatrix<T> szlug (getRowCount()-1, getColCount()-1, 0.0);
+            int row = 0, col = 0;
+            for (int i = 1; i < getRowCount(); i++) {
+                col = 0;
+                for (int j = 0; i < getColCount(); j++) {
+                    if (j != k) {
+                        szlug.setAt(row, col, getAt(i, j));
+                        col++;
+                    }
+                }
+                row++;
+            }
+            return szlug;
+        }
+
+        //T determinant() {
+        //  T det = 0;
+        //  int n = getRowCount();
+        //  if (getColCount() == getRowCount()){
+        //    if (getRowCount() == 1)
+        //      return getAt(0,0);
+        //    else if (getRowCount() == 2)
+        //      return (getAt(0,0) * getAt(1,1) - getAt(0,1) * getAt(1,0));
+        //    else {
+        //      for (int k = 0; k < getRowCount(); k++){
+        //          //MyMatrix<T> xd (getRowCount, getColCount, 0.0);
+        //          //xd = minor(k);
+        //        det += ((-1)^(k)) * getAt(0, k) * minor(k).determinant();
+        //        //n = size;
+        //      }
+        //      return det;
+        //    }
+        //  } else {
+        //    return 0.0;
+        //  }
+        //}
+
+        T determinant() {
+            int s;
+            if (getRowCount() != getColCount()) {
+                return 0.0;
+            } else {
+                switch (getRowCount()) {
+                    case 0 : return 0.0;
+                    case 1 : return getAt(0,0);
+                    case 2 : return getAt(0,0)*getAt(1,1)-getAt(1,0)*getAt(0,1);
+                    case 3 : return ((getAt(0,0)*getAt(1,1)*getAt(2,2) + getAt(0,1)*getAt(1,2)*getAt(2,0) + getAt(0,2)*getAt(1,0)*getAt(2,1))
+                                   -(getAt(2,0)*getAt(1,1)*getAt(0,2) + getAt(0,0)*getAt(2,1)*getAt(1,2) + getAt(2,2)*getAt(1,0)*getAt(0,1)));
+                    default : {
+                        s = 0;
+                        for (int col = 0; col < getColCount(); col++)
+                        {
+                            printf("OK %i\n", col);
+                            s += pow(-1.0, col+1.0) * getAt(0, col) * minor(col).determinant();
                         }
                     }
                 }
-
-                // przekształć macierz aby wynieść macierz [I|B]
-                M.solveGaussPartialSelf();
-
-                // wynieś macierz B z przekształcenia
-                for (int i = 0; i < n; i++) {
-                    for (int j = 0; j < n; j++) {
-                        this->setAt(i, j, M.getAt(i,j+n));
-                    }
-                }
             }
-            return *this;
-        }
-
-        T minor(MyMatrix<T> costam, int k){
-          int m = 1, p, r, c, row = 1, column, n = getRowCount();
-          MyMatrix<T> new_matrix(n,n, 0.0);
-          column = k;
-          for (r = 2; r <= n; r++){
-            p = 1;
-            for (c = 1; c <= n; c++){
-              if (r != row && c != column){
-                new_matrix.setAt(m, p, costam.getAt(r, c));
-              }
-            }
-            if (r != row)
-              m++;
-          }
-          n--;
-          return new_matrix.getAt(m, p);
-        }
-
-        T determinant (MyMatrix<T> costam){
-          T det;
-          int n = getRowCount();
-          if (getColCount() == getRowCount()){
-            if (getRowCount() == 1)
-              return costam.getAt(0,0);
-            else if (getRowCount() == 2)
-              return (costam.getAt(0,0) * costam.getAt(1,1) - costam.getAt(0,1) * costam.getAt(1,0));
-            else{
-              for (int k = 1; k <= getRowCount(); k++){
-                det += ((-1)^(1+k)) * costam.getAt(1, k) * determinant(minor(costam, k));
-                n = size;
-              }
-              return det;
-            }
-          }
-          else{
-            printf("Wypierdalaj z tą papierzą!!!");
-          }
+            return s;
         }
 
         vector<T> solveJacobi(int littleTim) {
@@ -647,8 +620,8 @@ int main(int argc, char** argv) {
     papaj.setAt(0, 1, 1);
     papaj.setAt(1, 0, 3);
     papaj.setAt(1, 1, 7);
-    papaj = papaj.invert();
     papaj.display();
+    printf("%lf\n", papaj.determinant());
 
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
