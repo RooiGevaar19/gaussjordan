@@ -382,7 +382,7 @@ private:
                 T maxEl = abs(this->matrix[i][i]);
                 int maxRow = i;
                 for (int k = i+1; k < n; k++) {
-                    if (abs(this->matrix[k][i]) > this->maxEl) {
+                    if (abs(this->matrix[k][i]) > maxEl) {
                         maxEl = abs(this->matrix[k][i]);
                         maxRow = k;
                     }
@@ -417,7 +417,7 @@ private:
                 // utwórz macierz rozszerzona [A|I]
                 for (int i = 0; i < n; i++) {
                     for (int j = 0; j < n; j++) {
-                        M.setAt(i, j, this.getAt(i,j));
+                        M.setAt(i, j, this->getAt(i,j));
                     }
                 }
 
@@ -437,11 +437,50 @@ private:
                 // wynieś macierz B z przekształcenia
                 for (int i = 0; i < n; i++) {
                     for (int j = 0; j < n; j++) {
-                        this.setAt(i, j, M.getAt(i,j+n));
+                        this->setAt(i, j, M.getAt(i,j+n));
                     }
                 }
             }
             return *this;
+        }
+
+        T minor(MyMatrix<T> costam, int k){
+          int m = 1, p, r, c, row = 1, column, n = getRowCount();
+          MyMatrix<T> new_matrix(n,n, 0.0);
+          column = k;
+          for (r = 2; r <= n; r++){
+            p = 1;
+            for (c = 1; c <= n; c++){
+              if (r != row && c != column){
+                new_matrix.setAt(m, p, costam.getAt(r, c));
+              }
+            }
+            if (r != row)
+              m++;
+          }
+          n--;
+          return new_matrix.getAt(m, p);
+        }
+
+        T determinant (MyMatrix<T> costam){
+          T det;
+          int n = getRowCount();
+          if (getColCount() == getRowCount()){
+            if (getRowCount() == 1)
+              return costam.getAt(0,0);
+            else if (getRowCount() == 2)
+              return (costam.getAt(0,0) * costam.getAt(1,1) - costam.getAt(0,1) * costam.getAt(1,0));
+            else{
+              for (int k = 1; k <= getRowCount(); k++){
+                det += ((-1)^(1+k)) * costam.getAt(1, k) * determinant(minor(costam, k));
+                n = size;
+              }
+              return det;
+            }
+          }
+          else{
+            printf("Wypierdalaj z tą papierzą!!!");
+          }
         }
 
         vector<T> solveJacobi(int littleTim) {
@@ -532,12 +571,17 @@ private:
 
           //wynieś macierz przeciwną DL = (D - L)^-1
           MyMatrix<T> DL (n, n, 0.0);
-          DL = D - L;
           for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
-              DL.setAt(i, j, 1.0/(DL.getAt(i, j)));
+              if (i == j){
+                DL.setAt(i, j, D.getAt(i, j));
+              }
+              else{
+                DL.setAt(i, j, L.getAt(i, j));
+              }
             }
           }
+          DL = DL.invert();
 
           // utwórz wektory rozwiązania
           vector<T> X (n, 0.0);
@@ -597,10 +641,19 @@ private:
 };
 
 int main(int argc, char** argv) {
+
+    MyMatrix<double> papaj (2,2, 0.0);
+    papaj.setAt(0, 0, 2);
+    papaj.setAt(0, 1, 1);
+    papaj.setAt(1, 0, 3);
+    papaj.setAt(1, 1, 7);
+    papaj = papaj.invert();
+    papaj.display();
+
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
-    res = M.solveGaussSeidel(10);
+    res = M.solveGaussSeidel(5);
     /*
     for (int i = 0; i < res.size(); i++) cout << res[i] << endl;
     */
