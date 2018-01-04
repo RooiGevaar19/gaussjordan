@@ -546,7 +546,7 @@ private:
 
         vector<T> solveGaussSeidel(int littleTim){
           int n = getRowCount();
-          // wynieś macierz główną bez elementów diagonalnych
+          // inicjalizacja macierzy z elementami przeciwnymi do macierzy A
           MyMatrix<T> L (n, n, 0.0);
           for (int i = 0; i < n; i++) {
               for (int j = 0; j < n; j++) {
@@ -568,53 +568,42 @@ private:
           for (int i = 0; i < n; i++) {
               for (int j = 0; j < n; j++) {
                   if (i == j) {
-                      D.setAt(i, j, this->getAt(i, j));
+                      D.setAt(i, j, 1.0/(this->getAt(i, j)));
                   }
               }
           }
-
-          //wynieś macierz przeciwną DL = (D - L)^-1
-          MyMatrix<T> DL (n, n, 0.0);
-          for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-              if (i == j){
-                DL.setAt(i, j, D.getAt(i, j));
-              }
-              else{
-                DL.setAt(i, j, L.getAt(i, j));
-              }
-            }
-          }
-          DL.display();
-          DL = DL.invert_triangular();
-          DL.display();
-
-          // utwórz wektory rozwiązania
-          vector<T> X (n, 0.0);
           // wynieś macierz elementów wolnych
           vector<T> B (n, 0.0);
           for (int i = 0; i < n; i++) {
               B[i] = this->matrix[i][n];
           }
+          // wynieś macierz Tj
+          MyMatrix<T> Tj (n, n, 0.0);
+          Tj = D * (L + U);
 
-          //wynieś macierz Tg i wektor Fg
-          MyMatrix<T> Tg (n, n, 0.0);
-          Tg = (DL*(-1)) * U;
-
-          vector<T> Fg (n, 0.0);
+          // wynieś wektor Fj
+          vector<T> Fj (n, 0.0);
           for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-              Fg[i] += (DL.getAt(i,j) * B[i]);
-            }
-        }
+            Fj[i] = (D.getAt(i,i)) * B[i];
+          }
 
+          // utwórz wektor rozwiązania
+          vector<T> X (n, 0.0);
+          vector<T> Y (n, 0.0);
+
+          // iteruj
           for (int Timmy = 0; Timmy < littleTim; Timmy++) {
-            X = Tg * X + Fg;
-            //X = ((D-L).invert_triangular()*U)*X + ((D-L).invert_triangular()*B);
-            //for (int i = 0; i < n; i++){
-            //  printf("x%d = %f\t", i+1, X[i]);
-            //}
-            //cout << "\n";
+              for (int i = 0; i < n; i++){
+                Y[i] = Fj[i];
+                for (int j = 0; j < n; j++){
+                  if (j == i)
+                    continue;
+                  Y[i] = Y[i] + ((Tj.getAt(i,j)) * X[j]);
+                  X[i] = Y[i];
+                }
+                printf("x%d = %f\t", i+1, Y[i]);
+              }
+              cout << "\n";
           }
           return X;
         }
