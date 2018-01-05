@@ -42,7 +42,7 @@ begin
                  count := count + 1.0;
              end;
         end;
-        writeln(FloatToStr(result/count));
+        writeln((result/count):2:12);
         writeln(StdErr, 'Success.');
      finally
             game.Destroy;

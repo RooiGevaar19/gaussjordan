@@ -639,13 +639,7 @@ int main(int argc, char** argv) {
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
-    //M.display();
-    res = M.solveGaussSeidel(100);
-    /*
-    for (int i = 0; i < res.size(); i++) cout << res[i] << endl;
-    */
-    ///*
-    cout << res[0] << endl;
-    //*/
+    res = M.solveGaussSeidel(1000);
+    printf("%.12lf\n", res[0]);
     return 0;
 }
