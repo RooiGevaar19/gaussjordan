@@ -5,7 +5,7 @@ public class MatrixGenerator {
 
 	public static void main(String[] args) {
 
-	 System.err.println("=== GENERATION ===");
+	 //System.err.println("=== GENERATION ===");
      Param par = new Param(args[0]);
 	 par.setFieldsCount(Integer.parseInt(args[1]));
 	 par.setP1StartPos(Integer.parseInt(args[1]));
@@ -37,15 +37,6 @@ public class MatrixGenerator {
      } catch (Exception e) {
     	 //System.out.println(i+1);
      }
-
-
-   // wypisz prawdopodobieństwa
-   for (Entry v : xs.getAll()) {
-  	 System.err.println("Var "+(v.getID())+" - P"+(v.getPlayer()+1)
-  			 +" ("+(v.getPosP1())
-  			 +", "+(v.getPosP2())
-  			 +") ");
-   }
 
      // utwórz macierz z prawdopodobieństw
      double[][] output = new double[xs.getCount()][xs.getCount()+2];

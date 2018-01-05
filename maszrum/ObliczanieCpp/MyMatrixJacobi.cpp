@@ -15,6 +15,23 @@ using namespace Eigen;
 int tries = 10;
 int max_grade = 1000;
 
+class Timer
+{
+public:
+    Timer() { clock_gettime(CLOCK_REALTIME, &beg_); }
+
+    double elapsed() {
+        clock_gettime(CLOCK_REALTIME, &end_);
+        return end_.tv_sec - beg_.tv_sec +
+            (end_.tv_nsec - beg_.tv_nsec) / 1000000000.;
+    }
+
+    void reset() { clock_gettime(CLOCK_REALTIME, &beg_); }
+
+private:
+    timespec beg_, end_;
+};
+
 template <typename T>
 vector<T> operator+(const vector<T>& a, const vector<T>& b)
 {
@@ -523,7 +540,11 @@ int main(int argc, char** argv) {
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
+    Timer t;
+    t.reset();
     res = M.solveJacobi(1000);
+    double tim = t.elapsed();
     printf("%.12lf\n", res[0]);
+    fprintf(stderr, "%.12lf", tim);
     return 0;
 }

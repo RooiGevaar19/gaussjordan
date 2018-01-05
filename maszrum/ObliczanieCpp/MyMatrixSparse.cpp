@@ -15,6 +15,23 @@ using namespace Eigen;
 int tries = 10;
 int max_grade = 1000;
 
+class Timer
+{
+public:
+    Timer() { clock_gettime(CLOCK_REALTIME, &beg_); }
+
+    double elapsed() {
+        clock_gettime(CLOCK_REALTIME, &end_);
+        return end_.tv_sec - beg_.tv_sec +
+            (end_.tv_nsec - beg_.tv_nsec) / 1000000000.;
+    }
+
+    void reset() { clock_gettime(CLOCK_REALTIME, &beg_); }
+
+private:
+    timespec beg_, end_;
+};
+
 template <typename T>
 vector<T> operator+(const vector<T>& a, const vector<T>& b)
 {
@@ -376,122 +393,6 @@ private:
             return x;
         }
 
-        // odwrocenie macierzy
-        //MyMatrix<T>& invert() {
-        //    MyMatrix<T> inverse_matrix (getRowCount(), getColCount(), 0.0);
-        //    MyMatrix<T> shit (getRowCount(), getColCount(), 0.0);
-        //    T det = determinant();
-        //    if (det == 0) {
-        //        return shit;
-        //    } else {
-        //        T num= 1 / det;
-        //        MyMatrix<T> m_Transpose (getRowCount(), getColCount(), 0.0);
-        //        m_Transpose = transpose();
-        //        for (int i = 1; i <= getRowCount(); i++) {
-        //            for (int j = 1; j <= getColCount(); j++) {
-        //                inverse_matrix.setAt(i,j, num*m_Transpose.getAt(i,j));
-        //            }
-        //        }
-        //    }
-        //    return inverse_matrix;
-        //}
-
-        MyMatrix<T> invert_triangular() {
-            MyMatrix<T> inverse_matrix (getRowCount(), getColCount(), 0.0);
-            MyMatrix<T> shit (getRowCount(), getColCount(), 0.0);
-            T det = det_triangular();
-            if (det == 0.0) {
-                return shit;
-            } else {
-
-                T num= 1 / det;
-
-                MyMatrix<T> m_Transpose (getColCount(), getRowCount(), 0.0);
-
-                m_Transpose = transpose();
-
-                for (int i = 0; i < getRowCount(); i++) {
-                    for (int j = 0; j < getColCount(); j++) {
-
-                        inverse_matrix.setAt(i,j, num*m_Transpose.getAt(i,j));
-                    }
-                }
-            }
-            return inverse_matrix;
-        }
-
-        //MyMatrix<T> minor(int m) {
-        //    MyMatrix<T> szlug (getRowCount()-1, getColCount()-1, 0.0);
-        //    int row = 0, col = 0;
-        //    for (int j = 1; j < getRowCount(); j++) {
-		//		for (int k = 0; k < getColCount(); k++) {
-		//			if (k < m) {
-		//				szlug.setAt(j - 1, k, matrix[j][k]);
-		//			} else if (k > m) {
-		//				szlug.setAt(j - 1, k - 1, matrix[j][k]);
-		//			}
-		//		}
-        //    }
-        //    return szlug;
-        //}
-        //
-        //T determinant() {
-        //  T det = 0;
-        //  int n = getRowCount();
-        //  if (getColCount() == getRowCount()){
-        //    if (getRowCount() == 1)
-        //      return getAt(0,0);
-        //    else if (getRowCount() == 2)
-        //      return (getAt(0,0) * getAt(1,1) - getAt(0,1) * getAt(1,0));
-        //    else {
-        //      for (int k = 0; k < getRowCount(); k++){
-        //          //MyMatrix<T> xd (getRowCount, getColCount, 0.0);
-        //          //xd = minor(k);
-        //        det += ((-1)^(k)) * getAt(0, k) * minor(k).determinant();
-        //        //n = size;
-        //      }
-        //      return det;
-        //    }
-        //  } else {
-        //    return 0.0;
-        //  }
-        //}
-        //
-        //T determinant() {
-        //    int s;
-        //    if (getRowCount() != getColCount()) {
-        //        return 0.0;
-        //    } else {
-        //        switch (getRowCount()) {
-        //            case 0 : return 0.0;
-        //            case 1 : return getAt(0,0);
-        //            case 2 : return getAt(0,0)*getAt(1,1)-getAt(1,0)*getAt(0,1);
-        //            case 3 : return ((getAt(0,0)*getAt(1,1)*getAt(2,2) + getAt(0,1)*getAt(1,2)*getAt(2,0) + getAt(0,2)*getAt(1,0)*getAt(2,1))
-        //                           -(getAt(2,0)*getAt(1,1)*getAt(0,2) + getAt(0,0)*getAt(2,1)*getAt(1,2) + getAt(2,2)*getAt(1,0)*getAt(0,1)));
-        //            default : {
-        //                s = 0;
-        //                for (int col = 0; col < getColCount(); col++)
-        //                {
-        //                    printf("OK %i\n", col);
-        //                    s += pow(-1.0, col+1.0) * getAt(0, col) * minor(col).determinant();
-        //                    minor(col).display();
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return s;
-        //}
-
-        T det_triangular() {
-            vector<T> S;
-            S = diagonalVector();
-            T s = 1.0;
-            for (int i = 0; i < S.size(); i++) {
-                s *= S[i];
-            }
-            return s;
-        }
-
         vector<T> solveJacobi(int littleTim) {
             int n = getRowCount();
             // inicjalizacja macierzy z elementami przeciwnymi do macierzy A
@@ -640,7 +541,11 @@ int main(int argc, char** argv) {
     MyMatrix<double> M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
+    Timer t;
+    t.reset();
     res = M.solveGaussPartial();
+    double tim = t.elapsed();
     printf("%.12lf\n", res[0]);
+    fprintf(stderr, "%.12lf", tim);
     return 0;
 }

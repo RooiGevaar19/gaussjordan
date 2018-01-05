@@ -1,7 +1,5 @@
 # run a script
 
-./engine.sh $dice $a $b
+./run.sh
 
-# $dice - textfile with dice parameters
-# $a - a value of N (2*N+1 represents fields' count)
-# $b - number of simulated games
+WARNING: The execution may last long (e.g. nearly 1 hour)

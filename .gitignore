@@ -7,3 +7,4 @@ maszrum/SymulacjaFPC/lib
 *.class
 *.out
 *.log
+input

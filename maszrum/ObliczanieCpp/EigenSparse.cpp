@@ -17,6 +17,23 @@ using namespace Eigen;
 int tries = 10;
 int max_grade = 1000;
 
+class Timer
+{
+public:
+    Timer() { clock_gettime(CLOCK_REALTIME, &beg_); }
+
+    double elapsed() {
+        clock_gettime(CLOCK_REALTIME, &end_);
+        return end_.tv_sec - beg_.tv_sec +
+            (end_.tv_nsec - beg_.tv_nsec) / 1000000000.;
+    }
+
+    void reset() { clock_gettime(CLOCK_REALTIME, &beg_); }
+
+private:
+    timespec beg_, end_;
+};
+
 template <typename T>
 vector<T> operator+(const vector<T>& a, const vector<T>& b)
 {
@@ -258,242 +275,6 @@ private:
             }
         }
 
-        // metoda eliminacji Gaussa bez wyboru elementu podstawowego
-        vector<T> solveGauss() {
-            int n = getRowCount();
-            for (int i = 0; i < n; i++) {
-                // wyprowadź zera przed obecnym wierszem
-                for (int k = i+1; k < n; k++) {
-                    T c = -matrix[k][i] / matrix[i][i];
-                    for (int j = i; j < n+1; j++) {
-                        if (i == j) {
-                            matrix[k][j] = 0;
-                        } else {
-                            matrix[k][j] += c * matrix[i][j];
-                        }
-                    }
-                }
-            }
-            // rozwiąż Ax = B za pomocą powstałej macierzy trójkątnej
-            vector<T> x(n);
-            for (int i=n-1; i>=0; i--) {
-                x[i] = matrix[i][n] / matrix[i][i];
-                for (int k=i-1;k>=0; k--) {
-                    matrix[k][n] -= matrix[k][i] * x[i];
-                }
-            }
-            return x;
-        }
-
-        // metoda eliminacji Gaussa z częściowym wyborem
-        vector<T> solveGaussPartial() {
-            int n = getRowCount();
-            for (int i = 0; i < n; i++) {
-                // znajdź wiersz z maksymalnym elementem
-                T maxEl = abs(matrix[i][i]);
-                int maxRow = i;
-                for (int k = i+1; k < n; k++) {
-                    if (abs(matrix[k][i]) > maxEl) {
-                        maxEl = abs(matrix[k][i]);
-                        maxRow = k;
-                    }
-                }
-                // zamień maksymalny wiersz z obecnym
-                for (int k = i; k < n+1; k++) {
-                    T pom = matrix[maxRow][k];
-                    matrix[maxRow][k] = matrix[i][k];
-                    matrix[i][k] = pom;
-                }
-                // wyprowadź zera przed obecnym wierszem
-                for (int k = i+1; k < n; k++) {
-                    T c = -matrix[k][i] / matrix[i][i];
-                    for (int j = i; j < n+1; j++) {
-                        if (i == j) {
-                            matrix[k][j] = 0;
-                        } else {
-                            matrix[k][j] += c * matrix[i][j];
-                        }
-                    }
-                }
-            }
-            // rozwiąż Ax = B za pomocą powstałej macierzy trójkątnej
-            vector<T> x(n);
-            for (int i=n-1; i>=0; i--) {
-                x[i] = matrix[i][n] / matrix[i][i];
-                for (int k=i-1;k>=0; k--) {
-                    matrix[k][n] -= matrix[k][i] * x[i];
-                }
-            }
-            return x;
-        }
-
-        // metoda eliminacji Gaussa z pełnym wyborem elementu
-        vector<T> solveGaussFull() {
-            int n = getRowCount();
-            for (int i = 0; i < n; i++) {
-                // znajdź wiersz z maksymalnym elementem
-                T maxEl = abs(matrix[i][i]);
-                int maxRow = i;
-                int maxCol = i;
-                for (int k = i+1; k < n; k++) {
-                    if (abs(matrix[k][i]) > maxEl) {
-                        maxEl = abs(matrix[k][i]);
-                        maxRow = k;
-                        maxCol = i;
-                    }
-                }
-                // zamień maksymalny wiersz z obecnym
-                for (int k = i; k < n+1; k++) {
-                    T pom = matrix[maxRow][k];
-                    matrix[maxRow][k] = matrix[i][k];
-                    matrix[i][k] = pom;
-                }
-                // zamień maksymalną kolumnę z obecną
-                for (int k = i; k < n+1; k++) {
-                  T pom = matrix[k][maxCol];
-                  matrix[k][maxCol] = matrix[k][i];
-                  matrix[k][i] = pom;
-                }
-                // wyprowadź zera przed obecnym wierszem
-                for (int k = i+1; k < n; k++) {
-                    T c = -matrix[k][i] / matrix[i][i];
-                    for (int j = i; j < n+1; j++) {
-                        if (i == j) {
-                            matrix[k][j] = 0;
-                        } else {
-                            matrix[k][j] += c * matrix[i][j];
-                        }
-                    }
-                }
-            }
-            // rozwiąż Ax = B za pomocą powstałej macierzy trójkątnej
-            vector<T> x(n);
-            for (int i=n-1; i>=0; i--) {
-                x[i] = matrix[i][n] / matrix[i][i];
-                for (int k=i-1;k>=0; k--) {
-                    matrix[k][n] -= matrix[k][i] * x[i];
-                }
-            }
-            return x;
-        }
-
-        vector<T> solveJacobi(int littleTim) {
-            int n = getRowCount();
-            // inicjalizacja macierzy z elementami przeciwnymi do macierzy A
-            MyMatrix<T> L (n, n, 0.0);
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (i > j) {
-                        L.setAt(i, j, (this->getAt(i, j))*(-1));
-                    }
-                }
-            }
-            MyMatrix<T> U (n, n, 0.0);
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (i < j) {
-                        U.setAt(i, j, (this->getAt(i, j))*(-1));
-                    }
-                }
-            }
-            // wynieś macierz diagonalną
-            MyMatrix<T> D (n, n, 0.0);
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (i == j) {
-                        D.setAt(i, j, 1.0/(this->getAt(i, j)));
-                    }
-                }
-            }
-            // wynieś macierz elementów wolnych
-            vector<T> B (n, 0.0);
-            for (int i = 0; i < n; i++) {
-                B[i] = this->matrix[i][n];
-            }
-            // wynieś macierz Tj
-            MyMatrix<T> Tj (n, n, 0.0);
-            Tj = D * (L + U);
-
-            // wynieś wektor Fj
-            vector<T> Fj (n, 0.0);
-            for (int i = 0; i < n; i++){
-              Fj[i] = (D.getAt(i,i)) * B[i];
-            }
-
-            // utwórz wektor rozwiązania
-            vector<T> X (n, 0.0);
-
-            // iteruj
-            for (int Timmy = 0; Timmy < littleTim; Timmy++) {
-                X = Tj*X + Fj;
-            }
-            return X;
-        }
-
-        vector<T> solveGaussSeidel(int littleTim){
-          int n = getRowCount();
-          // inicjalizacja macierzy z elementami przeciwnymi do macierzy A
-          MyMatrix<T> L (n, n, 0.0);
-          for (int i = 0; i < n; i++) {
-              for (int j = 0; j < n; j++) {
-                  if (i > j) {
-                      L.setAt(i, j, (this->getAt(i, j))*(-1));
-                  }
-              }
-          }
-          MyMatrix<T> U (n, n, 0.0);
-          for (int i = 0; i < n; i++) {
-              for (int j = 0; j < n; j++) {
-                  if (i < j) {
-                      U.setAt(i, j, (this->getAt(i, j))*(-1));
-                  }
-              }
-          }
-          // wynieś macierz diagonalną
-          MyMatrix<T> D (n, n, 0.0);
-          for (int i = 0; i < n; i++) {
-              for (int j = 0; j < n; j++) {
-                  if (i == j) {
-                      D.setAt(i, j, 1.0/(this->getAt(i, j)));
-                  }
-              }
-          }
-          // wynieś macierz elementów wolnych
-          vector<T> B (n, 0.0);
-          for (int i = 0; i < n; i++) {
-              B[i] = this->matrix[i][n];
-          }
-          // wynieś macierz Tj
-          MyMatrix<T> Tj (n, n, 0.0);
-          Tj = D * (L + U);
-
-          // wynieś wektor Fj
-          vector<T> Fj (n, 0.0);
-          for (int i = 0; i < n; i++){
-            Fj[i] = (D.getAt(i,i)) * B[i];
-          }
-
-          // utwórz wektor rozwiązania
-          vector<T> X (n, 0.0);
-          vector<T> Y (n, 0.0);
-
-          // iteruj
-          for (int Timmy = 0; Timmy < littleTim; Timmy++) {
-              for (int i = 0; i < n; i++){
-                Y[i] = Fj[i];
-                for (int j = 0; j < n; j++){
-                  if (j == i)
-                    continue;
-                  Y[i] = Y[i] + ((Tj.getAt(i,j)) * X[j]);
-                  X[i] = Y[i];
-                }
-                //printf("x%d = %f\t", i+1, Y[i]);
-              }
-              //cout << "\n";
-          }
-          return X;
-        }
-
         // ładowanie z pliku
         void loadFromFile(string fileName) {
             int x, y;
@@ -537,14 +318,14 @@ int main(int argc, char** argv) {
         B(i) = M.getAt(i,M.getColCount()-1);
     }
 
-    //SparseLU<MatrixXd> dec(A);
-    //VectorXd res = dec.solve(B);
-
     SparseLU<SparseMatrix<double, ColMajor>, COLAMDOrdering<int> >   solver;
     solver.analyzePattern(A);
     solver.factorize(A);
+    Timer t;
+    t.reset();
     VectorXd res = solver.solve(B);
-
+    double tim = t.elapsed();
     printf("%.12lf\n", res(0));
+    fprintf(stderr, "%.12lf", tim);
     return 0;
 }
