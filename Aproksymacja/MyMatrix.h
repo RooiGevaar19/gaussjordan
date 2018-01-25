@@ -348,20 +348,24 @@ private:
           return result;
         }
 
-        /*vector<double> CountVariable(double variable) {
+        double CountVariable(double variable) {
           string tmp = "";
           double result = 0;
-          for (int i = 0; i < matrix.getRowCount(); i++) {
+          for (int i = 0; i < getRowCount(); i++) {
             result += matrix[i][0] * pow(variable, i);
-            tmp += "(" + matrix[i][0] + "* x^" + i + ")";
-            if (i != matrix.getRowCount() - 1){
-              tmp += " + ";
-            }
+            // 2 * x^0 + 5 * x^1 + 1 * x^2
+            //tmp = tmp + " + " + getAt(i, 0) + " * x ^ " + i + ""; // i++
+            tmp.append(to_string(getAt(i,0)));
+            tmp.append(" * x ^ ");
+            tmp.append(to_string(i));
+            tmp.append(" + ");
+            //if (i != matrix.getRowCount() - 1){
+              //tmp += " + ";
+            //}
           }
           cout<<tmp;
           return result;
         }
-*/
         // ładowanie z pliku
         void loadFromFile(string fileName) {
             int x, y;

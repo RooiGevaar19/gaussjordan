@@ -14,6 +14,30 @@
 using namespace std;
 using namespace Eigen;
 
+double times[100][100];
+string names[100];
+
+void loadFile(string fileName) {
+  ifstream in(fileName);
+  if (!in) {
+    cout << "Cannot open file.\n";
+    return;
+  } else {
+    int new_rows, new_cols;
+    in >> new_cols;
+    in >> new_rows;
+    for (int i = 0; i < new_cols; i++) {
+      in >> names[i];
+    }
+    for (int i = 0; i < new_rows; i++) {
+      for (int j = 0; j < new_cols; j++) {
+        in >> times[i][j];
+      }
+    }
+    in.close();
+  }
+}
+
 int main(int argc, char** argv) {
     MyMatrix M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
