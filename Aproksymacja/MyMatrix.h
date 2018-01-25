@@ -34,8 +34,7 @@ private:
     timespec beg_, end_;
 };
 
-template <typename T>
-vector<T> operator+(const vector<T>& a, const vector<T>& b)
+vector<double> operator+(const vector<T>& a, const vector<T>& b)
 {
     assert(a.size() == b.size());
 
@@ -47,27 +46,11 @@ vector<T> operator+(const vector<T>& a, const vector<T>& b)
     return result;
 }
 
-template <typename T> class MyMatrix {
+class MyMatrix {
 private:
-    vector<vector<T> > matrix;
+    vector<vector<double> > matrix;
     unsigned rows;
     unsigned cols;
-
-    int abs(int x) {
-        return (x >= 0) ? x : -x;
-    }
-
-    long int abs(long int x) {
-        return (x >= 0) ? x : -x;
-    }
-
-    long long int abs(long long int x) {
-        return (x >= 0) ? x : -x;
-    }
-
-    float abs(float x) {
-        return (x >= 0) ? x : -x;
-    }
 
     double abs(double x) {
         return (x >= 0) ? x : -x;
@@ -75,7 +58,7 @@ private:
 
     public:
         // konstruktory
-        MyMatrix(unsigned wiersz, unsigned kolumna, const T& x) {
+        MyMatrix(unsigned wiersz, unsigned kolumna, const double &x) {
             matrix.resize(wiersz);
             for (unsigned i=0; i<matrix.size(); i++) {
                 matrix[i].resize(kolumna, x);
@@ -83,7 +66,7 @@ private:
             rows = wiersz;
             cols = kolumna;
         }
-        MyMatrix(const MyMatrix<T>& pom) {
+        MyMatrix(const MyMatrix& pom) {
             matrix = pom.matrix;
             rows = pom.getRowCount();
             cols = pom.getColCount();
@@ -95,7 +78,7 @@ private:
         }
 
         // przypisanie
-        MyMatrix<T>& operator=(const MyMatrix<T>& pom) {
+        MyMatrix& operator=(const MyMatrix& pom) {
             if (&pom == this) return *this;
             unsigned new_rows = pom.getRowCount();
             unsigned new_cols = pom.getColCount();
@@ -116,7 +99,7 @@ private:
         }
 
         // dodawanie macierzy
-        MyMatrix<T> operator+(const MyMatrix<T>& pom) {
+        MyMatrix operator+(const MyMatrix& pom) {
             MyMatrix result(rows, cols, 0.0);
             for (unsigned i=0; i<rows; i++) {
                 for (unsigned j=0; j<cols; j++) {
@@ -125,7 +108,7 @@ private:
             }
             return result;
         }
-        MyMatrix<T>& operator+=(const MyMatrix<T>& pom) {
+        MyMatrix& operator+=(const MyMatrix& pom) {
             unsigned rows = pom.getRowCount();
             unsigned cols = pom.getColCount();
             for (unsigned i=0; i<rows; i++) {
@@ -135,7 +118,7 @@ private:
             }
             return *this;
         }
-        MyMatrix<T> operator-(const MyMatrix<T>& pom) {
+        MyMatrix operator-(const MyMatrix& pom) {
             MyMatrix result(rows, cols, 0.0);
             for (unsigned i=0; i<rows; i++) {
                 for (unsigned j=0; j<cols; j++) {
@@ -144,7 +127,7 @@ private:
             }
             return result;
         }
-        MyMatrix<T>& operator-=(const MyMatrix<T>& pom) {
+        MyMatrix& operator-=(const MyMatrix& pom) {
             unsigned rows = pom.getRowCount();
             unsigned cols = pom.getColCount();
             for (unsigned i=0; i<rows; i++) {
@@ -154,7 +137,7 @@ private:
             }
             return *this;
         }
-        MyMatrix<T> operator*(const MyMatrix<T>& pom) {
+        MyMatrix operator*(const MyMatrix& pom) {
             unsigned rows = pom.getRowCount();
             unsigned cols = pom.getColCount();
             MyMatrix result(rows, cols, 0.0);
@@ -167,12 +150,12 @@ private:
             }
             return result;
         }
-        MyMatrix<T>& operator*=(const MyMatrix<T>& pom) {
+        MyMatrix& operator*=(const MyMatrix& pom) {
             MyMatrix result = (*this) * pom;
             (*this) = result;
             return *this;
         }
-        MyMatrix<T> transpose() {
+        MyMatrix transpose() {
             MyMatrix result(rows, cols, 0.0);
             for (unsigned i=0; i<rows; i++) {
                 for (unsigned j=0; j<cols; j++) {
@@ -183,7 +166,7 @@ private:
         }
 
         // skalary
-        MyMatrix<T> operator+(const T& pom) {
+        MyMatrix operator+(const double &pom) {
             MyMatrix result(rows, cols, 0.0);
             for (unsigned i = 0; i < rows; i++) {
                 for (unsigned j = 0; j < cols; j++) {
@@ -192,7 +175,7 @@ private:
             }
             return result;
         }
-        MyMatrix<T> operator-(const T& pom) {
+        MyMatrix operator-(const double &pom) {
             MyMatrix result(rows, cols, 0.0);
             for (unsigned i = 0; i < rows; i++) {
                 for (unsigned j = 0; j < cols; j++) {
@@ -201,7 +184,7 @@ private:
             }
             return result;
         }
-        MyMatrix<T> operator*(const T& pom) {
+        MyMatrix operator*(const double &pom) {
             MyMatrix result(rows, cols, 0.0);
             for (unsigned i = 0; i < rows; i++) {
                 for (unsigned j = 0; j < cols; j++) {
@@ -210,7 +193,7 @@ private:
             }
             return result;
         }
-        MyMatrix<T> operator/(const T& pom) {
+        MyMatrix operator/(const double &pom) {
             MyMatrix result(rows, cols, 0.0);
             for (unsigned i = 0; i < rows; i++) {
                 for (unsigned j = 0; j < cols; j++) {
@@ -221,8 +204,8 @@ private:
         }
 
         // mnożenie macierzy przez wektor
-        vector<T> operator*(const vector<T> pom) {
-            vector<T> result(pom.size(), 0.0);
+        vector<double> operator*(const vector<double> pom) {
+            vector<double> result(pom.size(), 0.0);
             for (unsigned i=0; i<rows; i++) {
                 for (unsigned j=0; j<cols; j++) {
                     result[i] += this->matrix[i][j] * pom[j];
@@ -230,8 +213,8 @@ private:
             }
             return result;
         }
-        vector<T> diagonalVector() {
-            vector<T> result(rows, 0.0);
+        vector<double> diagonalVector() {
+            vector<double> result(rows, 0.0);
             for (unsigned i=0; i<rows; i++) {
                 result[i] = this->matrix[i][i];
             }
@@ -239,19 +222,19 @@ private:
         }
 
         // dostań się do poszczególnych elementóœ
-        T& operator()(const unsigned& row, const unsigned& col) {
+        double& operator()(const unsigned& row, const unsigned& col) {
             return this->matrix[row][col];
         }
-        const T& operator()(const unsigned& row, const unsigned& col) const {
+        const double& operator()(const unsigned& row, const unsigned& col) const {
             return this->matrix[row][col];
         }
 
         // gettery i settery do kolumn
-        void setAt(unsigned row, unsigned col, const T& x) {
+        void setAt(unsigned row, unsigned col, const double& x) {
             this->matrix[row][col] = x;
         }
 
-        T& getAt(unsigned row, unsigned col) {
+        double& getAt(unsigned row, unsigned col) {
             return this->matrix[row][col];
         }
 
@@ -276,11 +259,11 @@ private:
         }
 
         //================== metody eliminacji
-        vector<T> solveGaussPartial() {
+        vector<double> solveGaussPartial() {
             int n = getRowCount();
             for (int i = 0; i < n; i++) {
                 // znajdź wiersz z maksymalnym elementem
-                T maxEl = abs(matrix[i][i]);
+                double maxEl = abs(matrix[i][i]);
                 int maxRow = i;
                 for (int k = i+1; k < n; k++) {
                     if (abs(matrix[k][i]) > maxEl) {
@@ -290,13 +273,13 @@ private:
                 }
                 // zamień maksymalny wiersz z obecnym
                 for (int k = i; k < n+1; k++) {
-                    T pom = matrix[maxRow][k];
+                    double pom = matrix[maxRow][k];
                     matrix[maxRow][k] = matrix[i][k];
                     matrix[i][k] = pom;
                 }
                 // wyprowadź zera przed obecnym wierszem
                 for (int k = i+1; k < n; k++) {
-                    T c = -matrix[k][i] / matrix[i][i];
+                    double c = -matrix[k][i] / matrix[i][i];
                     for (int j = i; j < n+1; j++) {
                         if (i == j) {
                             matrix[k][j] = 0;
@@ -307,7 +290,7 @@ private:
                 }
             }
             // rozwiąż Ax = B za pomocą powstałej macierzy trójkątnej
-            vector<T> x(n);
+            vector<double> x(n);
             for (int i=n-1; i>=0; i--) {
                 x[i] = matrix[i][n] / matrix[i][i];
                 for (int k=i-1;k>=0; k--) {
@@ -319,15 +302,15 @@ private:
 
 
         //================== aproksymacja
-        vector<T> CountEquation(int power){
+        vector<double> CountEquation(int power){
           int dataLength = matrix.getRowCount();
           int sCount = (2 * power) + 1;
           int tCount = power + 1;
           int size = power + 1;
-          T sTab [dataLength][sCount];
-          T tTab [dataLength][tCount];
-          T sResults [sCount];
-          T tResults [tCount];
+          double sTab [dataLength][sCount];
+          double tTab [dataLength][tCount];
+          double sResults [sCount];
+          double tResults [tCount];
 
           for (int i = 0; i < sTab.getRowCount(); i++){
             for (int j = 0; j < sTab.getColCount(); j++){
@@ -340,8 +323,8 @@ private:
             }
           }
 
-          MyMatrix<T> mat(size, size, 0.0);
-          vector<T> vec(size, 0.0);
+          MyMatrix mat(size, size, 0.0);
+          vector<double> vec(size, 0.0);
           int helper = 0;
           for (int i = 0; i < size; i++) {
             vec[i] = tResults[i];
@@ -350,7 +333,7 @@ private:
             }
             helper++;
           }
-          MyMatrix<T> M (size, size + 1, 0.0);
+          MyMatrix M (size, size + 1, 0.0);
           for (int i = 0; i < size; i++){
             for (int j = 0; j < size + 1; j++){
               if(j == size){
@@ -361,11 +344,11 @@ private:
               }
             }
           }
-          vector<T> result = M.solveGaussPartial();
+          vector<double> result = M.solveGaussPartial();
           return result;
         }
 
-        vector<T> CountVariable(double variable) {
+        vector<double> CountVariable(double variable) {
           string tmp = "";
           double result = 0;
           for (int i = 0; i < matrix.getRowCount(); i++) {
