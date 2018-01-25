@@ -11,6 +11,8 @@ public class Param {
     private int wallCount = 0;
     private int[] wall;
     private int[] prop;
+    private int mushCount;
+    private boolean[] mush;
 
     Param (String inp) {
         FileReader fr = null;
@@ -18,9 +20,6 @@ public class Param {
             fr = new FileReader(inp);
             Scanner plik = new Scanner(fr);
             while (plik.hasNext()) {
-                //this.fieldsCount = plik.nextInt();
-                //this.p1start = plik.nextInt();
-                //this.p2start = plik.nextInt();
                 this.wallCount = plik.nextInt();
                 wall = new int[wallCount];
                 prop = new int[wallCount];
@@ -91,5 +90,29 @@ public class Param {
 
     void setWallStrength(int index, int x) {
         this.prop[index] = x;
+    }
+
+    int getMushCount() {
+        return this.mushCount;
+    }
+
+    void setMushCount(int x) {
+        this.mushCount = x;
+    }
+
+    boolean[] getMushTable() {
+        return mush;
+    }
+
+    void setMushTable(boolean[] t) {
+        this.mush = t;
+    }
+
+    boolean isMushThere(int index) {
+        return this.mush[index];
+    }
+
+    void setMushThere(int index, boolean val) {
+        this.mush[index] = val;
     }
 }

@@ -1,22 +1,56 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.FileReader;
 
 public class MatrixGenerator {
 
 	public static void main(String[] args) {
 
-	 //System.err.println("=== GENERATION ===");
+	 // init
      Param par = new Param(args[0]);
 	 par.setFieldsCount(Integer.parseInt(args[1]));
 	 par.setP1StartPos(Integer.parseInt(args[1]));
 	 par.setP2StartPos(Integer.parseInt(args[1])*(-1));
+	 //System.out.println(args[2]);
+
      Dice dic = new Dice(par);
+
+	 int fields = 2*(par.getFieldsCount())+1;
+
+	 // wygeneruj grzyby
+	 boolean[] mushs = new boolean[fields];
+	 for (int i = 0; i < fields; i++) mushs[i] = false;
+	 par.setMushTable(mushs);
+	 FileReader fr = null;
+	 try {
+		 fr = new FileReader(args[2]);
+		 Scanner plik = new Scanner(fr);
+		 while (plik.hasNext()) {
+			 par.setMushCount(plik.nextInt());
+			 if (par.getMushCount() > 0)
+			 for (int i = 0; i < par.getMushCount(); i++) par.setMushThere(plik.nextInt()+fields/2, true);
+			 try {
+				 fr.close();
+			 } catch (IOException e) {
+				 e.printStackTrace();
+			 }
+		 }
+		 mushs = par.getMushTable();
+		 plik.close();
+	 } catch (FileNotFoundException e) {
+		 e.printStackTrace();
+	 }
+
 
      EntryManager xs = new EntryManager();
      int step = 0;
      int i = 0;
-     int fields = 2*(par.getFieldsCount())+1;
-     xs.add(new Entry(i+1, 0, par.getP1StartPos(), par.getP2StartPos()));
+
+     xs.add(new Entry(i+1, 0, par.getP1StartPos(), par.getP2StartPos(), 0, 0));
      boolean anythingleft;
      try {
     	 do {
@@ -25,9 +59,12 @@ public class MatrixGenerator {
 				 int curplay = ((xs.get(step).getPlayer()+1)%2);
 				 int curpos1 = Math.floorMod(((xs.get(step).getPosP1())+(k*((xs.get(step).getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
 				 int curpos2 = Math.floorMod(((xs.get(step).getPosP2())+(k*((xs.get(step).getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
-    			 if ((!xs.exists(curplay, curpos1, curpos2))&&(curpos1 != 0)&&(curpos2 != 0)) {
+				 int curmush1 = ((par.isMushThere(curpos1+fields/2)) && (curplay == 1)) ? xs.get(step).getMushP1()+1 : xs.get(step).getMushP1();
+				 int curmush2 = ((par.isMushThere(curpos2+fields/2)) && (curplay == 0)) ? xs.get(step).getMushP2()+1 : xs.get(step).getMushP2();
+    			 if ((!xs.exists(curplay, curpos1, curpos2, curmush1, curmush2))&&(curpos1 != 0)&&(curpos2 != 0)) {
     				 anythingleft = true;
-    				 xs.add(new Entry(i+2, curplay, curpos1, curpos2));
+					 par.setMushThere(((curpos1+fields/2)*((curplay+1)%2)) + ((curpos2+fields/2)*(curplay)), false);
+    				 xs.add(new Entry(i+2, curplay, curpos1, curpos2, curmush1, curmush2));
     				 i++;
     			 }
     		 }
@@ -38,6 +75,7 @@ public class MatrixGenerator {
     	 //System.out.println(i+1);
      }
 
+	 par.setMushTable(mushs);
      // utwórz macierz z prawdopodobieństw
      double[][] output = new double[xs.getCount()][xs.getCount()+2];
      for (int x = 0; x < xs.getCount(); x++) {
@@ -52,10 +90,12 @@ public class MatrixGenerator {
 			 int curplay = ((v.getPlayer()+1)%2);
 			 int curpos1 = Math.floorMod(((v.getPosP1())+(k*((v.getPlayer()+1)%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
 			 int curpos2 = Math.floorMod(((v.getPosP2())+(k*((v.getPlayer())%2))+par.getFieldsCount()), fields)-par.getFieldsCount();
-			 if (curpos1 == 0) {
+			 int curmush1 = ((par.isMushThere(curpos1+fields/2)) && (curplay == 1)) ? v.getMushP1()+1 : v.getMushP1();
+			 int curmush2 = ((par.isMushThere(curpos2+fields/2)) && (curplay == 0)) ? v.getMushP2()+1 : v.getMushP2();
+			 if ((curpos1 == 0 && curmush1 >= curmush2)||(curpos2 == 0 && curmush1 > curmush2)) {
 				 output[v.getID()-1][xs.getCount()+1] += 1.0/par.getSumStrength();
-			 } else if (xs.exists(curplay, curpos1, curpos2)) {
-				Entry insert = xs.findEntryByParams(curplay, curpos1, curpos2);
+			 } else if (xs.exists(curplay, curpos1, curpos2, curmush1, curmush2)) {
+				Entry insert = xs.findEntryByParams(curplay, curpos1, curpos2, curmush1, curmush2);
 				output[v.getID()-1][insert.getID()] -= 1.0/par.getSumStrength();
 			 }
 		 }

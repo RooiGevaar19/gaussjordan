@@ -1,2 +1,2 @@
 #!/bin/bash
-java MatrixGenerator $1 $2
+java MatrixGenerator $1 $2 $3
