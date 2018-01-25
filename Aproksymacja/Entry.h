@@ -42,5 +42,21 @@ class Entry {
 		void setTimes(vector<double> x) {
 			this.times = x;
 		}
+
+		double getTimesIndex(int i) {
+			return times[i];
+		} 
+
+		void setTimesIndex(int i, double value) {
+			this.times[i] = value;
+		}
+
+		int getTimesSize() {
+			return times.size();
+		}
+
+		void append(double value) {
+			this.times.push_back(value);
+		}
 }
 #endif
