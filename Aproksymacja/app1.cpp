@@ -111,11 +111,11 @@ int main(int argc, char** argv) {
     for (int col = 1; col < new_cols; col++) {
       //Timer t;
       //t.reset();
-      res = CountEquation(2, col);
+      res = CountEquation(1, col);
       //double tim = t.elapsed();
       //printf("%2.6lf\n", times[14][2]);
       printf("%s : \t%.12lf ", names[col].c_str(), res[0]);
-      for(int i = 1; i < 4; i++) {
+      for(int i = 1; i < 2; i++) {
         if (res[i] == 0) {
           continue;
         } else if (res[i] < 0) {
