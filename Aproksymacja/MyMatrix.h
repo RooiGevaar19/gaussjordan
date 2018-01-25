@@ -300,72 +300,24 @@ private:
             return x;
         }
 
+        //double CountVariable(double variable) {
+        //  string tmp = "";
+        //  double result = 0;
+        //  for (int i = 0; i < getRowCount(); i++) {
+        //    result += matrix[i][0] * pow(variable, i);
+        //    // 2 * x^0 + 5 * x^1 + 1 * x^2
+        //    //tmp = tmp + " + " + getAt(i, 0) + " * x ^ " + i + ""; // i++
+        //    tmp.append(to_string(getAt(i,0)));
+        //    tmp.append(" * x ^ ");
+        //    tmp.append(to_string(i));
 
-        //================== aproksymacja
-        vector<double> CountEquation(int power){
-          int dataLength = matrix.size();
-          int sCount = (2 * power) + 1;
-          int tCount = power + 1;
-          int size = power + 1;
-          double sTab [dataLength][sCount];
-          double tTab [dataLength][tCount];
-          double sResults [sCount];
-          double tResults [tCount];
-
-          for (int i = 0; i < dataLength; i++){
-            for (int j = 0; j < sCount; j++){
-              sTab[i][j] = pow(matrix[i][0], j);
-              sResults[j] += sTab[i][j];
-            }
-            for(int j = 0; j < tCount; j++){
-              tTab[i][j] = matrix[i][1] * sTab[i][j];
-              tResults[j] += tTab[i][j];
-            }
-          }
-
-          MyMatrix mat(size, size, 0.0);
-          vector<double> vec(size, 0.0);
-          int helper = 0;
-          for (int i = 0; i < size; i++) {
-            vec[i] = tResults[i];
-            for (int j = 0; j < size; j++) {
-              mat.setAt(i, j, sResults[j + helper]);
-            }
-            helper++;
-          }
-          MyMatrix M (size, size + 1, 0.0);
-          for (int i = 0; i < size; i++){
-            for (int j = 0; j < size + 1; j++){
-              if(j == size){
-                M.setAt(i, j, vec[i]);
-              }
-              else{
-                M.setAt(i, j, mat.getAt(i, j));
-              }
-            }
-          }
-          vector<double> result = M.solveGaussPartial();
-          return result;
-        }
-
-        double CountVariable(double variable) {
-          string tmp = "";
-          double result = 0;
-          for (int i = 0; i < getRowCount(); i++) {
-            result += matrix[i][0] * pow(variable, i);
-            // 2 * x^0 + 5 * x^1 + 1 * x^2
-            //tmp = tmp + " + " + getAt(i, 0) + " * x ^ " + i + ""; // i++
-            tmp.append(to_string(getAt(i,0)));
-            tmp.append(" * x ^ ");
-            tmp.append(to_string(i));
-            tmp.append(" + ");
-            //if (i != matrix.getRowCount() - 1){
-              //tmp += " + ";
-            //}
-          }
-          cout<<tmp;
-          return result;
-        }
+        //    if (i != getRowCount() - 1){
+        //      tmp.append(" + ");
+        //    }
+        //  }
+        //  cout<<tmp;
+        //  return result;
+        //}
         // ładowanie z pliku
         void loadFromFile(string fileName) {
             int x, y;
