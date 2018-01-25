@@ -32,7 +32,7 @@ class Entry {
 		}
 
 		void setName(string x) {
-			this.name = x;
+			this->name = x;
 		}
 
 		vector<double> getTimes() {
@@ -40,15 +40,15 @@ class Entry {
 		}
 
 		void setTimes(vector<double> x) {
-			this.times = x;
+			this->times = x;
 		}
 
 		double getTimesIndex(int i) {
 			return times[i];
-		} 
+		}
 
 		void setTimesIndex(int i, double value) {
-			this.times[i] = value;
+			this->times[i] = value;
 		}
 
 		int getTimesSize() {
@@ -56,7 +56,7 @@ class Entry {
 		}
 
 		void append(double value) {
-			this.times.push_back(value);
+			this->times.push_back(value);
 		}
-}
+};
 #endif

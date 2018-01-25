@@ -15,7 +15,7 @@ using namespace std;
 using namespace Eigen;
 
 int main(int argc, char** argv) {
-    MyMatrix<double> M (1, 2, 0.0);
+    MyMatrix M (1, 2, 0.0);
     M.loadFromFile(argv[1]);
     vector<double> res;
     Timer t;
